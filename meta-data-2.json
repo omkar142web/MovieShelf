@@ -202,5 +202,285 @@
       "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image5.png"
     },
     "category": "Movie"
+  },
+  {
+    "title": "Fight Club",
+    "description": "An insomniac office worker and a devil-may-care soapmaker form an underground fight club that evolves into something much more.",
+    "tags": [
+      "psychological",
+      "underground",
+      "fight club",
+      "dual identity",
+      "chaos",
+      "consumerism",
+      "dark",
+      "cult classic"
+    ],
+    "keywords": [
+      "fight club",
+      "soap",
+      "pink soap bar",
+      "brad pitt",
+      "edward norton",
+      "david fincher",
+      "basement fights",
+      "split personality"
+    ],
+    "genres": [
+      "Drama",
+      "Thriller"
+    ],
+    "cast": [
+      "Brad Pitt",
+      "Edward Norton",
+      "Helena Bonham Carter",
+      "Meat Loaf"
+    ],
+    "director": "David Fincher",
+    "posterImage": {
+      "fileName": "image6.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image6.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "The Godfather",
+    "description": "The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son.",
+    "tags": [
+      "crime",
+      "mafia",
+      "family",
+      "power",
+      "classic",
+      "italian-american",
+      "violent",
+      "dramatic"
+    ],
+    "keywords": [
+      "godfather",
+      "mafia",
+      "vito corleone",
+      "mafia family",
+      "crime boss",
+      "new york",
+      "italian",
+      "classic crime"
+    ],
+    "genres": [
+      "Crime",
+      "Drama"
+    ],
+    "cast": [
+      "Marlon Brando",
+      "Al Pacino",
+      "James Caan",
+      "Diane Keaton"
+    ],
+    "director": "Francis Ford Coppola",
+    "posterImage": {
+      "fileName": "image7.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image7.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "Inception",
+    "description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
+    "tags": [
+      "sci-fi",
+      "heist",
+      "dreams",
+      "mind-bending",
+      "thriller",
+      "action",
+      "christopher nolan"
+    ],
+    "keywords": [
+      "inception",
+      "dream sharing",
+      "dream layers",
+      "leonardo dicaprio",
+      "limbo",
+      "totem",
+      "spinning top",
+      "urban folding"
+    ],
+    "genres": [
+      "Action",
+      "Science Fiction",
+      "Thriller"
+    ],
+    "cast": [
+      "Leonardo DiCaprio",
+      "Joseph Gordon-Levitt",
+      "Ellen Page",
+      "Tom Hardy"
+    ],
+    "director": "Christopher Nolan",
+    "posterImage": {
+      "fileName": "image8.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image8.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "The Matrix",
+    "description": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
+    "tags": [
+      "sci-fi",
+      "cyberpunk",
+      "virtual reality",
+      "action",
+      "martial arts",
+      "dystopian",
+      "philosophical"
+    ],
+    "keywords": [
+      "matrix",
+      "neo",
+      "morpheus",
+      "red pill",
+      "blue pill",
+      "bullet time",
+      "sunglasses",
+      "digital rain"
+    ],
+    "genres": [
+      "Action",
+      "Science Fiction"
+    ],
+    "cast": [
+      "Keanu Reeves",
+      "Laurence Fishburne",
+      "Carrie-Anne Moss",
+      "Hugo Weaving"
+    ],
+    "director": "Lana Wachowski, Lilly Wachowski",
+    "posterImage": {
+      "fileName": "image9.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image9.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "Interstellar",
+    "description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+    "tags": [
+      "space",
+      "sci-fi",
+      "survival",
+      "wormhole",
+      "family",
+      "time",
+      "emotional"
+    ],
+    "keywords": [
+      "interstellar",
+      "space travel",
+      "wormhole",
+      "nasa",
+      "matthew mcconaughey",
+      "astronaut",
+      "black hole",
+      "endurance"
+    ],
+    "genres": [
+      "Adventure",
+      "Drama",
+      "Science Fiction"
+    ],
+    "cast": [
+      "Matthew McConaughey",
+      "Anne Hathaway",
+      "Jessica Chastain",
+      "Michael Caine"
+    ],
+    "director": "Christopher Nolan",
+    "posterImage": {
+      "fileName": "image10.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image10.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "Se7en",
+    "description": "Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.",
+    "tags": [
+      "crime",
+      "serial killer",
+      "dark",
+      "detective",
+      "psychological",
+      "gothic",
+      "rain",
+      "moral"
+    ],
+    "keywords": [
+      "se7en",
+      "seven deadly sins",
+      "serial killer",
+      "brad pitt",
+      "morgan freeman",
+      "david fincher",
+      "rain",
+      "detective"
+    ],
+    "genres": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "cast": [
+      "Morgan Freeman",
+      "Brad Pitt",
+      "Kevin Spacey",
+      "Gwyneth Paltrow"
+    ],
+    "director": "David Fincher",
+    "posterImage": {
+      "fileName": "image11.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image11.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "Life Is Beautiful",
+    "description": "When an open-minded Jewish librarian and his son become victims of the Holocaust, he uses humor and imagination to shield his child from the horrors around them.",
+    "tags": [
+      "wwii",
+      "holocaust",
+      "father-son",
+      "italian",
+      "romantic",
+      "heartwarming",
+      "dramatic",
+      "war"
+    ],
+    "keywords": [
+      "life is beautiful",
+      "la vita è bella",
+      "roberto benigni",
+      "holocaust",
+      "italy",
+      "bicycle",
+      "comedy",
+      "tragedy"
+    ],
+    "genres": [
+      "Comedy",
+      "Drama",
+      "Romance"
+    ],
+    "cast": [
+      "Roberto Benigni",
+      "Nicoletta Braschi",
+      "Giorgio Cantarini"
+    ],
+    "director": "Roberto Benigni",
+    "posterImage": {
+      "fileName": "image12.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image12.png"
+    },
+    "category": "Movie"
   }
 ]
