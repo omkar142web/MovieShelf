@@ -321,6 +321,11 @@
         color: #fff;
         background: #211b3b;
       }
+      .director-chip:hover {
+        border-color: #7c5cff;
+        color: #fff;
+        background: #211b3b;
+      }
       .filename {
         font-family: ui-monospace, monospace;
         color: #c7cbd1;
@@ -498,6 +503,7 @@
           ...(x.keywords || []),
           ...(x.genres || []),
           ...(x.cast || []),
+          x.director,
         ]
           .join(" ")
           .toLowerCase();
@@ -544,7 +550,7 @@
       function openModal(x) {
         const f = x.posterImage?.fileName || "";
         $("modalBox").innerHTML =
-          `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${esc(x.category || "")}</div><div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<button class="detail-chip genre-chip" data-genre="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<button class="detail-chip tag-chip" data-tag="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<button class="detail-chip keyword-chip" data-keyword="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
+          `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${esc(x.category || "")}</div>${x.director ? `<div class="detail-section"><div class="detail-label">Director</div><div class="detail-chips"><button class="detail-chip director-chip" data-director="${esc(x.director)}">${esc(x.director)}</button></div></div>` : ""}<div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<button class="detail-chip genre-chip" data-genre="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<button class="detail-chip tag-chip" data-tag="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<button class="detail-chip keyword-chip" data-keyword="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
         $("modal").classList.add("open");
       }
       $("searchInput").oninput = (e) => {
@@ -593,6 +599,7 @@
         const genreButton = e.target.closest(".genre-chip");
         const tagButton = e.target.closest(".tag-chip");
         const keywordButton = e.target.closest(".keyword-chip");
+        const directorButton = e.target.closest(".director-chip");
         if (castButton) {
           const castName = castButton.dataset.cast;
           state.search = castName;
@@ -644,6 +651,20 @@
           state.genre = "";
           state.tag = "";
           $("searchInput").value = keywordName;
+          $("categoryFilter").value = "";
+          $("genreFilter").value = "";
+          document
+            .querySelectorAll(".tag-btn")
+            .forEach((x) => x.classList.remove("active"));
+          $("modal").classList.remove("open");
+          render();
+        } else if (directorButton) {
+          const directorName = directorButton.dataset.director;
+          state.search = directorName;
+          state.category = "";
+          state.genre = "";
+          state.tag = "";
+          $("searchInput").value = directorName;
           $("categoryFilter").value = "";
           $("genreFilter").value = "";
           document

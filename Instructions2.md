@@ -10,6 +10,7 @@ When analyzing a movie poster image, generate **ONLY** the following JSON struct
   "keywords": [],
   "genres": [],
   "cast": [],
+  "director": "",
   "posterImage": {
     "fileName": ""
   },
@@ -230,7 +231,53 @@ Example:
 
 ---
 
-## 7. `posterImage.fileName`
+## 7. `director`
+
+Store the primary director of the identified movie.
+
+Rules:
+
+* Use the director's real name.
+* Use proper capitalization.
+* Return only the primary director.
+* Do not return an array.
+* Do not create an object.
+* Do not include assistant directors, producers, writers, or other crew members.
+* Director is movie metadata and may be determined from reliable knowledge of the identified movie.
+* The director does not need to be visibly printed on the poster.
+* If the movie cannot be reliably identified or the director cannot be determined reliably, use an empty string.
+
+Example:
+
+```json
+"director": "Christopher Nolan"
+```
+
+Do NOT produce:
+
+```json
+"director": [
+  "Christopher Nolan"
+]
+```
+
+Do NOT produce:
+
+```json
+"director": {
+  "name": "Christopher Nolan"
+}
+```
+
+Only use:
+
+```json
+"director": "Christopher Nolan"
+```
+
+---
+
+## 8. `posterImage.fileName`
 
 Store the **exact original uploaded filename**.
 
@@ -257,7 +304,7 @@ The filename should preferably be provided by the application/backend. Never gue
 
 ---
 
-## 8. `category`
+## 9. `category`
 
 For a movie poster, always use:
 
@@ -309,8 +356,8 @@ Examples:
 
 Only include such information if it is clearly visible as text on the poster and is genuinely useful for the requested field.
 
-**Exception for `cast`:**  
-Tags and keywords should remain useful visual/search metadata. Cast is separate movie metadata and may use reliable knowledge about the identified movie. Do not put cast names into tags merely because they are cast members. Store actor names only in the `cast` field.
+**Exception for `cast` and `director`:**  
+Tags and keywords should remain useful visual/search metadata. Cast and director are separate movie metadata fields and may use reliable knowledge about the identified movie. Do not put cast or director names into tags merely because they are cast or crew members. Store actor names only in the `cast` field and the director name only in the `director` field.
 
 ---
 
@@ -440,6 +487,7 @@ tags
 keywords
 genres
 cast
+director
 posterImage
 category
 ```

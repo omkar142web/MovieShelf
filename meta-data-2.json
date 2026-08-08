@@ -33,6 +33,7 @@
       "Stephen Lang",
       "Michelle Rodriguez"
     ],
+    "director": "James Cameron",
     "posterImage": {
       "fileName": "Assets/images.png"
     },
@@ -70,6 +71,7 @@
       "Robert Downey Jr.",
       "Florence Pugh"
     ],
+    "director": "Christopher Nolan",
     "posterImage": {
       "fileName": "Assets/images1.png"
     },
@@ -108,6 +110,7 @@
       "Scott Haze",
       "Reid Scott"
     ],
+    "director": "Ruben Fleischer",
     "posterImage": {
       "fileName": "Assets/images2.png"
     },
@@ -144,6 +147,7 @@
       "Arjan Bajwa",
       "Suresh Oberoi"
     ],
+    "director": "Sandeep Reddy Vanga",
     "posterImage": {
       "fileName": "Assets/images4.png"
     },
@@ -188,6 +192,7 @@
       "Colin Farrell",
       "Andy Serkis"
     ],
+    "director": "Matt Reeves",
     "posterImage": {
       "fileName": "Assets/image5.png"
     },
