@@ -1,0 +1,161 @@
+[
+  {
+    "title": "Avatar",
+    "description": "Close-up of a Na'vi face with a glowing yellow-green eye and bioluminescent markings against a dark, star-filled background.",
+    "tags": [
+      "sci-fi",
+      "fantasy",
+      "alien",
+      "bioluminescent",
+      "navi",
+      "space",
+      "futuristic"
+    ],
+    "keywords": [
+      "avatar",
+      "na'vi",
+      "glowing eye",
+      "blue skin",
+      "starry background",
+      "bioluminescent",
+      "pandora",
+      "3d film"
+    ],
+    "genres": [
+      "Science Fiction",
+      "Fantasy",
+      "Adventure"
+    ],
+    "posterImage": {
+      "fileName": "images.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "Oppenheimer",
+    "description": "A man in a suit and hat stands before a massive fiery explosion with Christopher Nolan's name prominently featured above the title.",
+    "tags": [
+      "historical",
+      "nuclear",
+      "fire",
+      "dark",
+      "scientist",
+      "explosion"
+    ],
+    "keywords": [
+      "oppenheimer",
+      "atomic bomb",
+      "nuclear explosion",
+      "christopher nolan",
+      "manhattan project",
+      "fiery background"
+    ],
+    "genres": [
+      "Drama",
+      "Biography",
+      "History",
+      "Thriller"
+    ],
+    "posterImage": {
+      "fileName": "images1.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "Venom",
+    "description": "A bearded man in a dark shirt faces the viewer while a menacing symbiote face merges on the left with the Golden Gate Bridge faintly visible in the background.",
+    "tags": [
+      "superhero",
+      "villain",
+      "symbiote",
+      "dark",
+      "action",
+      "comic book",
+      "marvel"
+    ],
+    "keywords": [
+      "venom",
+      "symbiote",
+      "marvel",
+      "golden gate bridge",
+      "san francisco",
+      "dark",
+      "action"
+    ],
+    "genres": [
+      "Action",
+      "Science Fiction",
+      "Thriller"
+    ],
+    "posterImage": {
+      "fileName": "images2.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "Kabir Singh",
+    "description": "A bearded man in a white medical coat and sunglasses stares intensely with a stethoscope around his neck against a dark red-tinted background.",
+    "tags": [
+      "romance",
+      "drama",
+      "bollywood",
+      "doctor",
+      "intense",
+      "medical"
+    ],
+    "keywords": [
+      "kabir singh",
+      "doctor",
+      "bollywood",
+      "hindi film",
+      "medical coat",
+      "sunglasses",
+      "stethoscope",
+      "intense stare"
+    ],
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "posterImage": {
+      "fileName": "images4.png"
+    },
+    "category": "Movie"
+  },
+  {
+    "title": "The Batman",
+    "description": "Batman stands in a rain-soaked Gotham City with the Bat-Signal shining above, surrounded by a villain, a woman, and a mobster under a dark orange sky.",
+    "tags": [
+      "superhero",
+      "dark",
+      "detective",
+      "gotham",
+      "batman",
+      "crime",
+      "dc",
+      "vigilante",
+      "rain"
+    ],
+    "keywords": [
+      "the batman",
+      "batman",
+      "gotham city",
+      "bat-signal",
+      "dc comics",
+      "rain",
+      "riddler",
+      "catwoman",
+      "batmobile"
+    ],
+    "genres": [
+      "Action",
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "posterImage": {
+      "fileName": "image5.png"
+    },
+    "category": "Movie"
+  }
+]

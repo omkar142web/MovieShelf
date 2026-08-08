@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Media Hub</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #0b0d10;
+        color: #f3f5f7;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          sans-serif;
+      }
+      header {
+        height: 72px;
+        border-bottom: 1px solid #28303a;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 0 28px;
+        position: sticky;
+        top: 0;
+        background: #0b0d10f2;
+        backdrop-filter: blur(12px);
+        z-index: 10;
+      }
+      .brand {
+        font-size: 20px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .brand span {
+        color: #9b86ff;
+      }
+      .search {
+        flex: 1;
+        max-width: 650px;
+        position: relative;
+      }
+      .search input {
+        width: 100%;
+        height: 42px;
+        background: #12161b;
+        border: 1px solid #28303a;
+        border-radius: 10px;
+        color: #fff;
+        padding: 0 15px 0 42px;
+        outline: none;
+      }
+      .search input:focus {
+        border-color: #7c5cff;
+      }
+      .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 9px;
+        color: #929aa5;
+      }
+      .count {
+        color: #929aa5;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+      main {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        min-height: calc(100vh - 72px);
+      }
+      aside {
+        border-right: 1px solid #28303a;
+        padding: 22px 18px;
+        background: #0e1115;
+      }
+      .filter-group {
+        margin-bottom: 25px;
+      }
+      .filter-title {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #929aa5;
+        margin-bottom: 11px;
+      }
+      select {
+        width: 100%;
+        background: #12161b;
+        border: 1px solid #28303a;
+        border-radius: 8px;
+        color: #fff;
+        padding: 10px;
+        outline: none;
+      }
+      .tag-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .tag-btn {
+        border: 1px solid #28303a;
+        background: #12161b;
+        color: #cdd2d8;
+        border-radius: 999px;
+        padding: 6px 9px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .tag-btn:hover,
+      .tag-btn.active {
+        border-color: #7c5cff;
+        color: #fff;
+        background: #211b3b;
+      }
+      .clear {
+        width: 100%;
+        border: 1px solid #28303a;
+        background: transparent;
+        color: #929aa5;
+        border-radius: 8px;
+        padding: 9px;
+        cursor: pointer;
+      }
+      .clear:hover {
+        color: #fff;
+      }
+      .content {
+        padding: 25px 28px;
+      }
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 22px;
+      }
+      .toolbar h1 {
+        font-size: 24px;
+        margin: 0;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 20px;
+      }
+      .card {
+        background: #12161b;
+        border: 1px solid #28303a;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: 0.18s;
+      }
+      .card:hover {
+        transform: translateY(-3px);
+        border-color: #454d58;
+      }
+      .poster {
+        width: 100%;
+        aspect-ratio: 2/3;
+        background: #1a1f25;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #66707c;
+        overflow: hidden;
+      }
+      .poster img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .placeholder {
+        font-size: 12px;
+        padding: 20px;
+        text-align: center;
+      }
+      .card-body {
+        padding: 13px;
+      }
+      .title {
+        font-weight: 750;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .meta {
+        color: #929aa5;
+        font-size: 12px;
+        margin-top: 5px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 10px;
+      }
+      .chip {
+        font-size: 10px;
+        color: #c7cbd1;
+        background: #20252c;
+        border-radius: 999px;
+        padding: 4px 7px;
+      }
+      .empty {
+        padding: 70px 20px;
+        text-align: center;
+        color: #929aa5;
+      }
+      .empty strong {
+        display: block;
+        color: #fff;
+        font-size: 18px;
+        margin-bottom: 7px;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: #000000b8;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 25px;
+        z-index: 20;
+      }
+      .modal.open {
+        display: flex;
+      }
+      .modal-box {
+        width: min(900px, 100%);
+        max-height: 90vh;
+        overflow: auto;
+        background: #12161b;
+        border: 1px solid #28303a;
+        border-radius: 16px;
+        display: grid;
+        grid-template-columns: 280px 1fr;
+      }
+      .modal-poster {
+        background: #0b0d10;
+        min-height: 420px;
+      }
+      .modal-poster img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .modal-info {
+        padding: 28px;
+      }
+      .modal-info h2 {
+        margin: 0 35px 8px 0;
+        font-size: 30px;
+      }
+      .modal-description {
+        color: #b5bcc5;
+        line-height: 1.6;
+      }
+      .close {
+        position: fixed;
+        right: 25px;
+        top: 20px;
+        border: 0;
+        background: #252a31;
+        color: #fff;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 20px;
+      }
+      .detail-section {
+        margin-top: 22px;
+      }
+      .detail-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #929aa5;
+        margin-bottom: 9px;
+      }
+      .detail-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .detail-chip {
+        background: #20252c;
+        border: 1px solid #303740;
+        padding: 6px 9px;
+        border-radius: 999px;
+        font-size: 12px;
+      }
+      .filename {
+        font-family: ui-monospace, monospace;
+        color: #c7cbd1;
+        background: #0e1115;
+        border: 1px solid #28303a;
+        padding: 9px;
+        border-radius: 7px;
+        word-break: break-all;
+      }
+      @media (max-width: 800px) {
+        header {
+          padding: 0 15px;
+        }
+        .count {
+          display: none;
+        }
+        main {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          border-right: 0;
+          border-bottom: 1px solid #28303a;
+        }
+        .filter-group {
+          display: inline-block;
+          width: 48%;
+          vertical-align: top;
+          margin-right: 1%;
+        }
+        .grid {
+          grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+        }
+        .content {
+          padding: 18px;
+        }
+        .modal-box {
+          grid-template-columns: 1fr;
+        }
+        .modal-poster {
+          height: 350px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">AI <span>Media Hub</span></div>
+      <div class="search">
+        <span class="search-icon">⌕</span
+        ><input
+          id="searchInput"
+          type="search"
+          placeholder="Search titles, tags, keywords, genres..."
+        />
+      </div>
+      <div class="count" id="count"></div>
+    </header>
+
+    <main>
+      <aside>
+        <div class="filter-group">
+          <div class="filter-title">Category</div>
+          <select id="categoryFilter">
+            <option value="">All categories</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-title">Genre</div>
+          <select id="genreFilter">
+            <option value="">All genres</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <div class="filter-title">Tags</div>
+          <div id="tagCloud" class="tag-cloud"></div>
+        </div>
+        <button id="clearBtn" class="clear">Clear all filters</button>
+      </aside>
+
+      <section class="content">
+        <div class="toolbar">
+          <h1>Media Library</h1>
+          <select id="sortSelect" style="width: auto">
+            <option value="title">Title A–Z</option>
+            <option value="titleDesc">Title Z–A</option>
+          </select>
+        </div>
+        <div id="grid" class="grid"></div>
+        <div id="empty" class="empty" style="display: none">
+          <strong>No media found</strong>Try another search or clear the
+          filters.
+        </div>
+      </section>
+    </main>
+
+    <div id="modal" class="modal">
+      <button class="close" id="closeModal">×</button>
+      <div class="modal-box" id="modalBox"></div>
+    </div>
+
+    <script>
+      const mediaData = [
+        {
+          title: "Avatar",
+          description:
+            "Close-up of a Na'vi face with a glowing yellow-green eye and bioluminescent markings against a dark, star-filled background.",
+          tags: [
+            "sci-fi",
+            "fantasy",
+            "alien",
+            "bioluminescent",
+            "navi",
+            "space",
+            "futuristic",
+          ],
+          keywords: [
+            "avatar",
+            "na'vi",
+            "glowing eye",
+            "blue skin",
+            "starry background",
+            "bioluminescent",
+            "pandora",
+            "3d film",
+          ],
+          genres: ["Science Fiction", "Fantasy", "Adventure"],
+          posterImage: { fileName: "images.png" },
+          category: "Movie",
+        },
+        {
+          title: "Oppenheimer",
+          description:
+            "A man in a suit and hat stands before a massive fiery explosion with Christopher Nolan's name prominently featured above the title.",
+          tags: [
+            "historical",
+            "nuclear",
+            "fire",
+            "dark",
+            "scientist",
+            "explosion",
+          ],
+          keywords: [
+            "oppenheimer",
+            "atomic bomb",
+            "nuclear explosion",
+            "christopher nolan",
+            "manhattan project",
+            "fiery background",
+          ],
+          genres: ["Drama", "Biography", "History", "Thriller"],
+          posterImage: { fileName: "images1.png" },
+          category: "Movie",
+        },
+        {
+          title: "Venom",
+          description:
+            "A bearded man in a dark shirt faces the viewer while a menacing symbiote face merges on the left with the Golden Gate Bridge faintly visible in the background.",
+          tags: [
+            "superhero",
+            "villain",
+            "symbiote",
+            "dark",
+            "action",
+            "comic book",
+            "marvel",
+          ],
+          keywords: [
+            "venom",
+            "symbiote",
+            "marvel",
+            "golden gate bridge",
+            "san francisco",
+            "dark",
+            "action",
+          ],
+          genres: ["Action", "Science Fiction", "Thriller"],
+          posterImage: { fileName: "images2.png" },
+          category: "Movie",
+        },
+        {
+          title: "Kabir Singh",
+          description:
+            "A bearded man in a white medical coat and sunglasses stares intensely with a stethoscope around his neck against a dark red-tinted background.",
+          tags: [
+            "romance",
+            "drama",
+            "bollywood",
+            "doctor",
+            "intense",
+            "medical",
+          ],
+          keywords: [
+            "kabir singh",
+            "doctor",
+            "bollywood",
+            "hindi film",
+            "medical coat",
+            "sunglasses",
+            "stethoscope",
+            "intense stare",
+          ],
+          genres: ["Drama", "Romance"],
+          posterImage: { fileName: "images4.png" },
+          category: "Movie",
+        },
+        {
+          title: "The Batman",
+          description:
+            "Batman stands in a rain-soaked Gotham City with the Bat-Signal shining above, surrounded by a villain, a woman, and a mobster under a dark orange sky.",
+          tags: [
+            "superhero",
+            "dark",
+            "detective",
+            "gotham",
+            "batman",
+            "crime",
+            "dc",
+            "vigilante",
+            "rain",
+          ],
+          keywords: [
+            "the batman",
+            "batman",
+            "gotham city",
+            "bat-signal",
+            "dc comics",
+            "rain",
+            "riddler",
+            "catwoman",
+            "batmobile",
+          ],
+          genres: ["Action", "Crime", "Drama", "Thriller"],
+          posterImage: { fileName: "image5.png" },
+          category: "Movie",
+        },
+      ];
+
+      const state = {
+        search: "",
+        category: "",
+        genre: "",
+        tag: "",
+        sort: "title",
+      };
+      const $ = (id) => document.getElementById(id);
+      const norm = (v) =>
+        String(v ?? "")
+          .toLowerCase()
+          .trim();
+      const esc = (v) =>
+        String(v ?? "").replace(
+          /[&<>"']/g,
+          (m) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#039;",
+            })[m],
+        );
+
+      function unique(a) {
+        return [...new Set(a.filter(Boolean))].sort((a, b) =>
+          String(a).localeCompare(String(b)),
+        );
+      }
+
+      function populateFilters() {
+        unique(mediaData.map((x) => x.category)).forEach((v) =>
+          $("categoryFilter").insertAdjacentHTML(
+            "beforeend",
+            `<option value="${esc(v)}">${esc(v)}</option>`,
+          ),
+        );
+        unique(mediaData.flatMap((x) => x.genres || [])).forEach((v) =>
+          $("genreFilter").insertAdjacentHTML(
+            "beforeend",
+            `<option value="${esc(v)}">${esc(v)}</option>`,
+          ),
+        );
+        $("tagCloud").innerHTML = unique(mediaData.flatMap((x) => x.tags || []))
+          .map(
+            (v) =>
+              `<button class="tag-btn" data-tag="${esc(v)}">${esc(v)}</button>`,
+          )
+          .join("");
+      }
+      function searchable(x) {
+        return [
+          x.title,
+          x.description,
+          x.category,
+          ...(x.tags || []),
+          ...(x.keywords || []),
+          ...(x.genres || []),
+        ]
+          .join(" ")
+          .toLowerCase();
+      }
+      function filtered() {
+        let r = mediaData.filter((x) => {
+          const q = norm(state.search);
+          return (
+            (!q || searchable(x).includes(q)) &&
+            (!state.category || norm(x.category) === norm(state.category)) &&
+            (!state.genre ||
+              (x.genres || []).some((g) => norm(g) === norm(state.genre))) &&
+            (!state.tag ||
+              (x.tags || []).some((t) => norm(t) === norm(state.tag)))
+          );
+        });
+        r.sort((a, b) => {
+          let c = a.title.localeCompare(b.title);
+          return state.sort === "titleDesc" ? -c : c;
+        });
+        return r;
+      }
+      function render() {
+        const r = filtered();
+        $("count").textContent = `${r.length} of ${mediaData.length}`;
+        $("grid").innerHTML = r.map((x) => card(x)).join("");
+        $("empty").style.display = r.length ? "none" : "block";
+        document
+          .querySelectorAll(".card")
+          .forEach(
+            (c) => (c.onclick = () => openModal(mediaData[+c.dataset.index])),
+          );
+      }
+      function card(x) {
+        const i = mediaData.indexOf(x),
+          f = x.posterImage?.fileName || "";
+        return `<article class="card" data-index="${i}"><div class="poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="placeholder" style="display:none">Image not found<br>${esc(f)}</div>` : `<div class="placeholder">No poster image</div>`}</div><div class="card-body"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.category || "")}</div><div class="chips">${(
+          x.genres || []
+        )
+          .slice(0, 3)
+          .map((g) => `<span class="chip">${esc(g)}</span>`)
+          .join("")}</div></div></article>`;
+      }
+      function openModal(x) {
+        const f = x.posterImage?.fileName || "";
+        $("modalBox").innerHTML =
+          `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${esc(x.category || "")}</div><div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
+        $("modal").classList.add("open");
+      }
+      $("searchInput").oninput = (e) => {
+        state.search = e.target.value;
+        render();
+      };
+      $("categoryFilter").onchange = (e) => {
+        state.category = e.target.value;
+        render();
+      };
+      $("genreFilter").onchange = (e) => {
+        state.genre = e.target.value;
+        render();
+      };
+      $("sortSelect").onchange = (e) => {
+        state.sort = e.target.value;
+        render();
+      };
+      $("tagCloud").onclick = (e) => {
+        const b = e.target.closest(".tag-btn");
+        if (!b) return;
+        state.tag = state.tag === b.dataset.tag ? "" : b.dataset.tag;
+        document
+          .querySelectorAll(".tag-btn")
+          .forEach((x) =>
+            x.classList.toggle("active", x.dataset.tag === state.tag),
+          );
+        render();
+      };
+      $("clearBtn").onclick = () => {
+        Object.assign(state, { search: "", category: "", genre: "", tag: "" });
+        $("searchInput").value = "";
+        $("categoryFilter").value = "";
+        $("genreFilter").value = "";
+        document
+          .querySelectorAll(".tag-btn")
+          .forEach((x) => x.classList.remove("active"));
+        render();
+      };
+      $("closeModal").onclick = () => $("modal").classList.remove("open");
+      $("modal").onclick = (e) => {
+        if (e.target === $("modal")) $("modal").classList.remove("open");
+      };
+      document.onkeydown = (e) => {
+        if (e.key === "Escape") $("modal").classList.remove("open");
+      };
+      populateFilters();
+      render();
+    </script>
+  </body>
+</html>
