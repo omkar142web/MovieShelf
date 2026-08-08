@@ -357,6 +357,44 @@
         border-radius: 7px;
         word-break: break-all;
       }
+      .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+      }
+      .page-btn {
+        border: 1px solid var(--border-main);
+        background: var(--bg-card);
+        color: var(--text-tag);
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        min-width: 40px;
+        text-align: center;
+      }
+      .page-btn:hover:not(:disabled) {
+        border-color: var(--accent);
+        color: var(--text-white);
+        background: var(--bg-hover);
+      }
+      .page-btn.active {
+        border-color: var(--accent);
+        color: var(--text-white);
+        background: var(--bg-hover);
+      }
+      .page-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .page-info {
+        color: var(--text-secondary);
+        font-size: 13px;
+        white-space: nowrap;
+      }
       @media (max-width: 800px) {
         header {
           padding: 0 15px;
@@ -436,6 +474,7 @@
           </select>
         </div>
         <div id="grid" class="grid"></div>
+        <div id="pagination" class="pagination"></div>
         <div id="empty" class="empty" style="display: none">
           <strong>No media found</strong>Try another search or clear the
           filters.
@@ -471,6 +510,8 @@
         genre: "",
         tag: "",
         sort: "title",
+        page: 1,
+        pageSize: 8,
       };
       const $ = (id) => document.getElementById(id);
       const norm = (v) =>
@@ -548,21 +589,56 @@
         });
         return r;
       }
+      function totalPages() {
+        return Math.max(1, Math.ceil(filtered().length / state.pageSize));
+      }
+      function goToPage(p) {
+        state.page = Math.min(Math.max(1, p), totalPages());
+        render();
+      }
+      function setPage1() {
+        state.page = 1;
+        render();
+      }
       function render() {
-        const r = filtered();
-        $("count").textContent = `${r.length} of ${mediaData.length}`;
-        $("grid").innerHTML = r.map((x) => card(x)).join("");
-        $("empty").style.display = r.length ? "none" : "block";
+        const all = filtered();
+        const total = all.length;
+        const totalP = totalPages();
+        if (state.page > totalP) state.page = totalP;
+        const start = (state.page - 1) * state.pageSize;
+        const pageItems = all.slice(start, start + state.pageSize);
+        $("count").textContent = `${total} of ${mediaData.length}`;
+        $("grid").innerHTML = pageItems.map((x) => card(x)).join("");
+        $("empty").style.display = total ? "none" : "block";
         document
           .querySelectorAll(".card")
           .forEach(
             (c) => (c.onclick = () => openModal(mediaData[+c.dataset.index])),
           );
+        renderPagination(totalP);
+      }
+      function renderPagination(totalP) {
+        const container = $("pagination");
+        if (totalP <= 1) {
+          container.innerHTML = "";
+          return;
+        }
+        let html = `<button class="page-btn" ${state.page === 1 ? 'disabled' : ''} onclick="goToPage(${state.page - 1})">Prev</button>`;
+        for (let i = 1; i <= totalP; i++) {
+          html += `<button class="page-btn ${i === state.page ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+        }
+        html += `<button class="page-btn" ${state.page === totalP ? 'disabled' : ''} onclick="goToPage(${state.page + 1})">Next</button>`;
+        html += `<span class="page-info">Page ${state.page} of ${totalP}</span>`;
+        container.innerHTML = html;
       }
       function card(x) {
-        const i = mediaData.indexOf(x),
-          f = x.posterImage?.fileName ? "Assets/" + x.posterImage.fileName : "";
-        return `<article class="card" data-index="${i}"><div class="poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="placeholder" style="display:none">Image not found<br>${esc(f)}</div>` : `<div class="placeholder">No poster image</div>`}</div><div class="card-body"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.category || "")}</div><div class="chips">${(
+        const i = mediaData.indexOf(x);
+        const thumb = x.posterImage?.thumbnailFileName
+          ? "Assets/thumbnails/" + x.posterImage.thumbnailFileName
+          : x.posterImage?.fileName
+            ? "Assets/" + x.posterImage.fileName
+            : "";
+        return `<article class="card" data-index="${i}"><div class="poster">${thumb ? `<img src="${esc(thumb)}" alt="${esc(x.title)} poster" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="placeholder" style="display:none">Image not found<br>${esc(thumb)}</div>` : `<div class="placeholder">No poster image</div>`}</div><div class="card-body"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.category || "")}</div><div class="chips">${(
           x.genres || []
         )
           .slice(0, 3)
@@ -577,19 +653,19 @@
       }
       $("searchInput").oninput = (e) => {
         state.search = e.target.value;
-        render();
+        setPage1();
       };
       $("categoryFilter").onchange = (e) => {
         state.category = e.target.value;
-        render();
+        setPage1();
       };
       $("genreFilter").onchange = (e) => {
         state.genre = e.target.value;
-        render();
+        setPage1();
       };
       $("sortSelect").onchange = (e) => {
         state.sort = e.target.value;
-        render();
+        setPage1();
       };
       $("tagCloud").onclick = (e) => {
         const b = e.target.closest(".tag-btn");
@@ -600,7 +676,7 @@
           .forEach((x) =>
             x.classList.toggle("active", x.dataset.tag === state.tag),
           );
-        render();
+        setPage1();
       };
       $("clearBtn").onclick = () => {
         Object.assign(state, { search: "", category: "", genre: "", tag: "" });
@@ -610,7 +686,7 @@
         document
           .querySelectorAll(".tag-btn")
           .forEach((x) => x.classList.remove("active"));
-        render();
+        setPage1();
       };
       $("closeModal").onclick = () => $("modal").classList.remove("open");
       $("modal").onclick = (e) => {
@@ -635,7 +711,7 @@
             .querySelectorAll(".tag-btn")
             .forEach((x) => x.classList.remove("active"));
           $("modal").classList.remove("open");
-          render();
+          setPage1();
         } else if (genreButton) {
           const genreName = genreButton.dataset.genre;
           state.genre = genreName;
@@ -649,7 +725,7 @@
             .querySelectorAll(".tag-btn")
             .forEach((x) => x.classList.remove("active"));
           $("modal").classList.remove("open");
-          render();
+          setPage1();
         } else if (tagButton) {
           const tagName = tagButton.dataset.tag;
           state.tag = state.tag === tagName ? "" : tagName;
@@ -665,7 +741,7 @@
               x.classList.toggle("active", x.dataset.tag === state.tag),
             );
           $("modal").classList.remove("open");
-          render();
+          setPage1();
         } else if (keywordButton) {
           const keywordName = keywordButton.dataset.keyword;
           state.search = keywordName;
@@ -679,7 +755,7 @@
             .querySelectorAll(".tag-btn")
             .forEach((x) => x.classList.remove("active"));
           $("modal").classList.remove("open");
-          render();
+          setPage1();
         } else if (directorButton) {
           const directorName = directorButton.dataset.director;
           state.search = directorName;
@@ -693,7 +769,7 @@
             .querySelectorAll(".tag-btn")
             .forEach((x) => x.classList.remove("active"));
           $("modal").classList.remove("open");
-          render();
+          setPage1();
         }
       });
       document.onkeydown = (e) => {
