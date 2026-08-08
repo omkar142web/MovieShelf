@@ -5,13 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Media Hub</title>
     <style>
+      :root {
+        --bg-main: #0b0d10;
+        --bg-sidebar: #0e1115;
+        --bg-card: #12161b;
+        --bg-chip: #20252c;
+        --bg-hover: #211b3b;
+
+        --border-main: #28303a;
+        --border-chip: #303740;
+        --border-hover: #454d58;
+        --accent: #7c5cff;
+
+        --text-main: #f3f5f7;
+        --text-white: #fff;
+        --text-secondary: #929aa5;
+        --text-muted: #b5bcc5;
+        --text-chip: #c7cbd1;
+        --text-tag: #cdd2d8;
+
+        --overlay: #000000b8;
+      }
+
       * {
         box-sizing: border-box;
       }
       body {
         margin: 0;
-        background: #0b0d10;
-        color: #f3f5f7;
+        background: var(--bg-main);
+        color: var(--text-main);
         font-family:
           Inter,
           system-ui,
@@ -21,7 +43,7 @@
       }
       header {
         height: 72px;
-        border-bottom: 1px solid #28303a;
+        border-bottom: 1px solid var(--border-main);
         display: flex;
         align-items: center;
         gap: 20px;
@@ -48,24 +70,24 @@
       .search input {
         width: 100%;
         height: 42px;
-        background: #12161b;
-        border: 1px solid #28303a;
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
         border-radius: 10px;
-        color: #fff;
+        color: var(--text-white);
         padding: 0 15px 0 42px;
         outline: none;
       }
       .search input:focus {
-        border-color: #7c5cff;
+        border-color: var(--accent);
       }
       .search-icon {
         position: absolute;
         left: 15px;
         top: 9px;
-        color: #929aa5;
+        color: var(--text-secondary);
       }
       .count {
-        color: #929aa5;
+        color: var(--text-secondary);
         font-size: 13px;
         white-space: nowrap;
       }
@@ -75,9 +97,9 @@
         min-height: calc(100vh - 72px);
       }
       aside {
-        border-right: 1px solid #28303a;
+        border-right: 1px solid var(--border-main);
         padding: 22px 18px;
-        background: #0e1115;
+        background: var(--bg-sidebar);
       }
       .filter-group {
         margin-bottom: 25px;
@@ -86,15 +108,15 @@
         font-size: 12px;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: #929aa5;
+        color: var(--text-secondary);
         margin-bottom: 11px;
       }
       select {
         width: 100%;
-        background: #12161b;
-        border: 1px solid #28303a;
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
         border-radius: 8px;
-        color: #fff;
+        color: var(--text-white);
         padding: 10px;
         outline: none;
       }
@@ -104,9 +126,9 @@
         gap: 7px;
       }
       .tag-btn {
-        border: 1px solid #28303a;
-        background: #12161b;
-        color: #cdd2d8;
+        border: 1px solid var(--border-main);
+        background: var(--bg-card);
+        color: var(--text-tag);
         border-radius: 999px;
         padding: 6px 9px;
         font-size: 12px;
@@ -114,21 +136,21 @@
       }
       .tag-btn:hover,
       .tag-btn.active {
-        border-color: #7c5cff;
-        color: #fff;
-        background: #211b3b;
+        border-color: var(--accent);
+        color: var(--text-white);
+        background: var(--bg-hover);
       }
       .clear {
         width: 100%;
-        border: 1px solid #28303a;
+        border: 1px solid var(--border-main);
         background: transparent;
-        color: #929aa5;
+        color: var(--text-secondary);
         border-radius: 8px;
         padding: 9px;
         cursor: pointer;
       }
       .clear:hover {
-        color: #fff;
+        color: var(--text-white);
       }
       .content {
         padding: 25px 28px;
@@ -150,8 +172,8 @@
         gap: 20px;
       }
       .card {
-        background: #12161b;
-        border: 1px solid #28303a;
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
         border-radius: 12px;
         overflow: hidden;
         cursor: pointer;
@@ -159,7 +181,7 @@
       }
       .card:hover {
         transform: translateY(-3px);
-        border-color: #454d58;
+        border-color: var(--border-hover);
       }
       .poster {
         width: 100%;
@@ -193,7 +215,7 @@
         text-overflow: ellipsis;
       }
       .meta {
-        color: #929aa5;
+        color: var(--text-secondary);
         font-size: 12px;
         margin-top: 5px;
       }
@@ -205,26 +227,26 @@
       }
       .chip {
         font-size: 10px;
-        color: #c7cbd1;
-        background: #20252c;
+        color: var(--text-chip);
+        background: var(--bg-chip);
         border-radius: 999px;
         padding: 4px 7px;
       }
       .empty {
         padding: 70px 20px;
         text-align: center;
-        color: #929aa5;
+        color: var(--text-secondary);
       }
       .empty strong {
         display: block;
-        color: #fff;
+        color: var(--text-white);
         font-size: 18px;
         margin-bottom: 7px;
       }
       .modal {
         position: fixed;
         inset: 0;
-        background: #000000b8;
+        background: var(--overlay);
         display: none;
         align-items: center;
         justify-content: center;
@@ -238,14 +260,14 @@
         width: min(900px, 100%);
         max-height: 90vh;
         overflow: auto;
-        background: #12161b;
-        border: 1px solid #28303a;
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
         border-radius: 16px;
         display: grid;
         grid-template-columns: 280px 1fr;
       }
       .modal-poster {
-        background: #0b0d10;
+        background: var(--bg-main);
         min-height: 420px;
       }
       .modal-poster img {
@@ -261,7 +283,7 @@
         font-size: 30px;
       }
       .modal-description {
-        color: #b5bcc5;
+        color: var(--text-muted);
         line-height: 1.6;
       }
       .close {
@@ -270,7 +292,7 @@
         top: 20px;
         border: 0;
         background: #252a31;
-        color: #fff;
+        color: var(--text-white);
         width: 36px;
         height: 36px;
         border-radius: 50%;
@@ -284,7 +306,7 @@
         font-size: 11px;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: #929aa5;
+        color: var(--text-secondary);
         margin-bottom: 9px;
       }
       .detail-chips {
@@ -293,44 +315,44 @@
         gap: 7px;
       }
       .detail-chip {
-        color: #c7cbd1;
-        background: #20252c;
-        border: 1px solid #303740;
+        color: var(--text-chip);
+        background: var(--bg-chip);
+        border: 1px solid var(--border-chip);
         padding: 6px 9px;
         border-radius: 999px;
         font-size: 12px;
         cursor: pointer;
       }
       .cast-chip:hover {
-        border-color: #7c5cff;
-        color: #fff;
-        background: #211b3b;
+        border-color: var(--accent);
+        color: var(--text-white);
+        background: var(--bg-hover);
       }
       .genre-chip:hover {
-        border-color: #7c5cff;
-        color: #fff;
-        background: #211b3b;
+        border-color: var(--accent);
+        color: var(--text-white);
+        background: var(--bg-hover);
       }
       .tag-chip:hover {
-        border-color: #7c5cff;
-        color: #fff;
-        background: #211b3b;
+        border-color: var(--accent);
+        color: var(--text-white);
+        background: var(--bg-hover);
       }
       .keyword-chip:hover {
-        border-color: #7c5cff;
-        color: #fff;
-        background: #211b3b;
+        border-color: var(--accent);
+        color: var(--text-white);
+        background: var(--bg-hover);
       }
       .director-chip:hover {
-        border-color: #7c5cff;
-        color: #fff;
-        background: #211b3b;
+        border-color: var(--accent);
+        color: var(--text-white);
+        background: var(--bg-hover);
       }
       .filename {
         font-family: ui-monospace, monospace;
-        color: #c7cbd1;
-        background: #0e1115;
-        border: 1px solid #28303a;
+        color: var(--text-chip);
+        background: var(--bg-sidebar);
+        border: 1px solid var(--border-main);
         padding: 9px;
         border-radius: 7px;
         word-break: break-all;
@@ -347,7 +369,7 @@
         }
         aside {
           border-right: 0;
-          border-bottom: 1px solid #28303a;
+          border-bottom: 1px solid var(--border-main);
         }
         .filter-group {
           display: inline-block;
