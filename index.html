@@ -4,121 +4,282 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Media Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
-        --bg-main: #0b0d10;
-        --bg-sidebar: #0e1115;
-        --bg-card: #12161b;
-        --bg-chip: #20252c;
-        --bg-hover: #211b3b;
+        /* Surfaces */
+        --void: #06070a;
+        --bg-main: #0a0c11;
+        --bg-sidebar: #0b0d13;
+        --bg-card: #12151c;
+        --bg-card-hover: #171b24;
+        --bg-chip: rgba(255, 255, 255, 0.05);
+        --bg-hover: rgba(139, 92, 246, 0.12);
+        --bg-glass: rgba(10, 12, 17, 0.78);
 
-        --border-main: #28303a;
-        --border-chip: #303740;
-        --border-hover: #454d58;
-        --accent: #7c5cff;
+        /* Borders */
+        --border-main: rgba(255, 255, 255, 0.08);
+        --border-soft: rgba(255, 255, 255, 0.05);
+        --border-chip: rgba(255, 255, 255, 0.09);
+        --border-hover: rgba(139, 92, 246, 0.55);
 
-        --text-main: #f3f5f7;
-        --text-white: #fff;
-        --text-secondary: #929aa5;
-        --text-muted: #b5bcc5;
-        --text-chip: #c7cbd1;
-        --text-tag: #cdd2d8;
+        /* Accent */
+        --accent: #8b5cf6;
+        --accent-2: #c4b5fd;
+        --accent-glow: rgba(139, 92, 246, 0.45);
+        --accent-dim: rgba(139, 92, 246, 0.14);
 
-        --overlay: #000000b8;
+        /* Text */
+        --text-main: #f4f5f8;
+        --text-white: #ffffff;
+        --text-secondary: #939aa6;
+        --text-muted: #b3bac4;
+        --text-chip: #c8cdd4;
+        --text-tag: #c8cdd4;
+        --text-faint: #5b6270;
+
+        --overlay: rgba(4, 5, 8, 0.82);
+
+        /* Scale */
+        --r-sm: 8px;
+        --r-md: 12px;
+        --r-lg: 18px;
+        --r-xl: 22px;
+        --r-pill: 999px;
+
+        --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-lift: 0 20px 40px -14px rgba(0, 0, 0, 0.55);
+        --shadow-glow:
+          0 0 0 1px var(--border-hover), 0 12px 32px -8px var(--accent-glow);
+
+        --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+        --font-display: "Bricolage Grotesque", Inter, system-ui, sans-serif;
+        --font-body: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, monospace;
       }
 
       * {
         box-sizing: border-box;
       }
+      html {
+        scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+      }
       body {
         margin: 0;
         background: var(--bg-main);
         color: var(--text-main);
-        font-family:
-          Inter,
-          system-ui,
-          -apple-system,
-          Segoe UI,
-          sans-serif;
+        font-family: var(--font-body);
+        position: relative;
+        min-height: 100vh;
       }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            560px 380px at 14% -6%,
+            rgba(139, 92, 246, 0.16),
+            transparent 65%
+          ),
+          radial-gradient(
+            680px 460px at 100% 12%,
+            rgba(88, 101, 242, 0.08),
+            transparent 60%
+          ),
+          radial-gradient(
+            600px 500px at 50% 115%,
+            rgba(139, 92, 246, 0.08),
+            transparent 60%
+          );
+      }
+      button,
+      input,
+      select {
+        font-family: inherit;
+      }
+      *:focus-visible {
+        outline: 2px solid var(--accent-2);
+        outline-offset: 2px;
+        border-radius: 6px;
+      }
+
       header {
-        height: 72px;
+        height: 76px;
         border-bottom: 1px solid var(--border-main);
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 22px;
         padding: 0 28px;
         position: sticky;
         top: 0;
-        background: #0b0d10f2;
-        backdrop-filter: blur(12px);
-        z-index: 10;
+        background: var(--bg-glass);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        z-index: 30;
+      }
+      header::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent-glow) 30%,
+          var(--accent-glow) 70%,
+          transparent
+        );
+        opacity: 0.55;
       }
       .brand {
-        font-size: 20px;
-        font-weight: 800;
+        font-family: var(--font-display);
+        font-size: 21px;
+        font-weight: 700;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        letter-spacing: -0.01em;
       }
-      .brand span {
-        color: #9b86ff;
+      .brand-mark {
+        display: inline-flex;
+        color: var(--accent-2);
+        filter: drop-shadow(0 0 10px var(--accent-glow));
+      }
+      .brand-accent {
+        background: linear-gradient(135deg, var(--accent-2), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
       }
       .search {
         flex: 1;
         max-width: 650px;
         position: relative;
       }
-      .search input {
-        width: 100%;
-        height: 42px;
-        background: var(--bg-card);
-        border: 1px solid var(--border-main);
-        border-radius: 10px;
-        color: var(--text-white);
-        padding: 0 15px 0 42px;
-        outline: none;
-      }
-      .search input:focus {
-        border-color: var(--accent);
-      }
       .search-icon {
         position: absolute;
-        left: 15px;
-        top: 9px;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
         color: var(--text-secondary);
+        display: flex;
+        pointer-events: none;
+        transition: color 0.18s var(--ease);
+      }
+      .search input {
+        width: 100%;
+        height: 44px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
+        border-radius: var(--r-pill);
+        color: var(--text-white);
+        padding: 0 16px 0 44px;
+        outline: none;
+        font-size: 14px;
+        transition:
+          border-color 0.18s var(--ease),
+          box-shadow 0.18s var(--ease),
+          background 0.18s var(--ease);
+      }
+      .search input::placeholder {
+        color: var(--text-faint);
+      }
+      .search input:focus {
+        border-color: var(--border-hover);
+        background: var(--bg-card-hover);
+        box-shadow: 0 0 0 4px var(--accent-dim);
+      }
+      .search input:focus + .search-icon,
+      .search input:focus ~ .search-icon {
+        color: var(--accent-2);
       }
       .count {
         color: var(--text-secondary);
-        font-size: 13px;
+        font-size: 12.5px;
+        font-family: var(--font-mono);
         white-space: nowrap;
+        background: var(--bg-chip);
+        border: 1px solid var(--border-soft);
+        padding: 7px 12px;
+        border-radius: var(--r-pill);
       }
+
       main {
         display: grid;
-        grid-template-columns: 250px 1fr;
-        min-height: calc(100vh - 72px);
+        grid-template-columns: 260px 1fr;
+        min-height: calc(100vh - 76px);
       }
       aside {
         border-right: 1px solid var(--border-main);
-        padding: 22px 18px;
+        padding: 26px 20px;
         background: var(--bg-sidebar);
       }
       .filter-group {
-        margin-bottom: 25px;
+        margin-bottom: 28px;
       }
       .filter-title {
-        font-size: 12px;
+        font-size: 11.5px;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.09em;
         color: var(--text-secondary);
-        margin-bottom: 11px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-weight: 600;
+      }
+      .filter-title svg {
+        opacity: 0.75;
+      }
+      .select-wrap {
+        position: relative;
+      }
+      .select-wrap::after {
+        content: "";
+        position: absolute;
+        right: 13px;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        border-right: 1.6px solid var(--text-secondary);
+        border-bottom: 1.6px solid var(--text-secondary);
+        transform: translateY(-65%) rotate(45deg);
+        pointer-events: none;
       }
       select {
         width: 100%;
+        appearance: none;
+        -webkit-appearance: none;
         background: var(--bg-card);
         border: 1px solid var(--border-main);
-        border-radius: 8px;
+        border-radius: var(--r-md);
         color: var(--text-white);
-        padding: 10px;
+        padding: 11px 34px 11px 13px;
         outline: none;
+        font-size: 13.5px;
+        cursor: pointer;
+        transition:
+          border-color 0.18s var(--ease),
+          box-shadow 0.18s var(--ease);
+      }
+      select:hover {
+        border-color: var(--border-hover);
+      }
+      select:focus {
+        border-color: var(--border-hover);
+        box-shadow: 0 0 0 4px var(--accent-dim);
       }
       .tag-cloud {
         display: flex;
@@ -129,175 +290,358 @@
         border: 1px solid var(--border-main);
         background: var(--bg-card);
         color: var(--text-tag);
-        border-radius: 999px;
-        padding: 6px 9px;
+        border-radius: var(--r-pill);
+        padding: 6.5px 11px;
         font-size: 12px;
         cursor: pointer;
+        transition:
+          border-color 0.16s var(--ease),
+          color 0.16s var(--ease),
+          background 0.16s var(--ease),
+          transform 0.16s var(--ease);
       }
-      .tag-btn:hover,
-      .tag-btn.active {
-        border-color: var(--accent);
+      .tag-btn:hover {
+        border-color: var(--border-hover);
         color: var(--text-white);
         background: var(--bg-hover);
+        transform: translateY(-1px);
+      }
+      .tag-btn.active {
+        border-color: transparent;
+        color: var(--text-white);
+        background: linear-gradient(135deg, var(--accent), #6d43e0);
+        box-shadow: 0 4px 14px -4px var(--accent-glow);
       }
       .clear {
         width: 100%;
         border: 1px solid var(--border-main);
         background: transparent;
         color: var(--text-secondary);
-        border-radius: 8px;
-        padding: 9px;
+        border-radius: var(--r-md);
+        padding: 10px;
         cursor: pointer;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        transition:
+          color 0.16s var(--ease),
+          border-color 0.16s var(--ease),
+          background 0.16s var(--ease);
       }
       .clear:hover {
         color: var(--text-white);
+        border-color: var(--border-hover);
+        background: var(--bg-hover);
       }
+
       .content {
-        padding: 25px 28px;
+        padding: 28px 30px 40px;
       }
       .toolbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 15px;
-        margin-bottom: 22px;
+        margin-bottom: 24px;
       }
       .toolbar h1 {
-        font-size: 24px;
+        font-family: var(--font-display);
+        font-size: 25px;
+        font-weight: 700;
         margin: 0;
+        letter-spacing: -0.015em;
       }
+      .sort-wrap {
+        width: 170px;
+      }
+      .sort-wrap select {
+        font-size: 13px;
+        padding: 9px 32px 9px 12px;
+      }
+
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
+        gap: 22px;
       }
       .card {
-        background: var(--bg-card);
+        background: linear-gradient(
+          165deg,
+          var(--bg-card),
+          var(--bg-card-hover) 130%
+        );
         border: 1px solid var(--border-main);
-        border-radius: 12px;
+        border-radius: var(--r-lg);
         overflow: hidden;
         cursor: pointer;
-        transition: 0.18s;
+        box-shadow: var(--shadow-card);
+        transition:
+          transform 0.24s var(--ease),
+          border-color 0.24s var(--ease),
+          box-shadow 0.24s var(--ease);
+        animation: cardIn 0.4s var(--ease) both;
       }
       .card:hover {
-        transform: translateY(-3px);
+        transform: translateY(-5px);
         border-color: var(--border-hover);
+        box-shadow: var(--shadow-lift), var(--shadow-glow);
       }
       .poster {
         width: 100%;
         aspect-ratio: 2/3;
-        background: #1a1f25;
+        background: #171b22;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #66707c;
+        color: #5c6572;
         overflow: hidden;
+        position: relative;
       }
       .poster img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
+        transition: transform 0.5s var(--ease);
+      }
+      .card:hover .poster img {
+        transform: scale(1.06);
+      }
+      .poster-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(6, 7, 10, 0.92) 0%,
+          rgba(6, 7, 10, 0.15) 55%,
+          transparent 80%
+        );
+        display: flex;
+        align-items: flex-end;
+        padding: 14px;
+        opacity: 0;
+        transition: opacity 0.24s var(--ease);
+      }
+      .card:hover .poster-overlay {
+        opacity: 1;
+      }
+      .poster-view {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-white);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(6px);
+        padding: 6px 10px;
+        border-radius: var(--r-pill);
       }
       .placeholder {
         font-size: 12px;
         padding: 20px;
         text-align: center;
+        line-height: 1.5;
       }
       .card-body {
-        padding: 13px;
+        padding: 14px 14px 16px;
       }
       .title {
-        font-weight: 750;
-        font-size: 16px;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 15.5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        letter-spacing: -0.01em;
       }
       .meta {
         color: var(--text-secondary);
         font-size: 12px;
-        margin-top: 5px;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 14px;
+      }
+      .meta-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--accent-2);
+        flex-shrink: 0;
+        box-shadow: 0 0 6px var(--accent-glow);
       }
       .chips {
         display: flex;
         flex-wrap: wrap;
         gap: 5px;
-        margin-top: 10px;
+        margin-top: 11px;
       }
       .chip {
-        font-size: 10px;
+        font-size: 10.5px;
         color: var(--text-chip);
         background: var(--bg-chip);
-        border-radius: 999px;
-        padding: 4px 7px;
+        border: 1px solid var(--border-soft);
+        border-radius: var(--r-pill);
+        padding: 4px 8px;
       }
+
       .empty {
-        padding: 70px 20px;
+        padding: 90px 20px;
         text-align: center;
         color: var(--text-secondary);
+      }
+      .empty-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 18px;
+        width: 56px;
+        height: 56px;
+        border-radius: var(--r-lg);
+        background: var(--bg-chip);
+        border: 1px solid var(--border-main);
+        color: var(--text-faint);
       }
       .empty strong {
         display: block;
         color: var(--text-white);
+        font-family: var(--font-display);
         font-size: 18px;
         margin-bottom: 7px;
       }
+      .empty span {
+        font-size: 13.5px;
+      }
+
+      @keyframes cardIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes modalIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes overlayIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
       .modal {
         position: fixed;
         inset: 0;
         background: var(--overlay);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
         display: none;
         align-items: center;
         justify-content: center;
         padding: 25px;
-        z-index: 20;
+        z-index: 50;
       }
       .modal.open {
         display: flex;
+        animation: overlayIn 0.2s var(--ease) both;
       }
       .modal-box {
         width: min(900px, 100%);
         max-height: 90vh;
         overflow: auto;
-        background: var(--bg-card);
+        background: linear-gradient(
+          165deg,
+          var(--bg-card),
+          var(--bg-card-hover) 140%
+        );
         border: 1px solid var(--border-main);
-        border-radius: 16px;
+        border-radius: var(--r-xl);
         display: grid;
         grid-template-columns: 280px 1fr;
+        box-shadow:
+          0 30px 70px -20px rgba(0, 0, 0, 0.65),
+          0 0 0 1px rgba(255, 255, 255, 0.04);
+        animation: modalIn 0.3s var(--ease) both;
       }
       .modal-poster {
-        background: var(--bg-main);
+        background: var(--void);
         min-height: 420px;
+        position: relative;
       }
       .modal-poster img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
+      .modal-poster::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.35),
+          transparent 40%
+        );
+        pointer-events: none;
+      }
       .modal-info {
-        padding: 28px;
+        padding: 30px 32px 34px;
       }
       .modal-info h2 {
-        margin: 0 35px 8px 0;
-        font-size: 30px;
+        font-family: var(--font-display);
+        margin: 0 40px 8px 0;
+        font-size: 29px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
       }
       .modal-description {
         color: var(--text-muted);
-        line-height: 1.6;
+        line-height: 1.65;
+        font-size: 14.5px;
       }
       .close {
         position: fixed;
         right: 25px;
         top: 20px;
-        border: 0;
-        background: #252a31;
+        border: 1px solid var(--border-main);
+        background: var(--bg-glass);
+        backdrop-filter: blur(8px);
         color: var(--text-white);
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
         border-radius: 50%;
         cursor: pointer;
-        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 55;
+        transition:
+          border-color 0.2s var(--ease),
+          transform 0.2s var(--ease),
+          background 0.2s var(--ease);
+      }
+      .close:hover {
+        border-color: var(--border-hover);
+        background: var(--bg-hover);
+        transform: rotate(90deg);
       }
       .detail-section {
         margin-top: 22px;
@@ -305,9 +649,16 @@
       .detail-label {
         font-size: 11px;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.09em;
         color: var(--text-secondary);
-        margin-bottom: 9px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-weight: 600;
+      }
+      .detail-label svg {
+        opacity: 0.8;
       }
       .detail-chips {
         display: flex;
@@ -318,86 +669,83 @@
         color: var(--text-chip);
         background: var(--bg-chip);
         border: 1px solid var(--border-chip);
-        padding: 6px 9px;
-        border-radius: 999px;
+        padding: 6.5px 11px;
+        border-radius: var(--r-pill);
         font-size: 12px;
         cursor: pointer;
+        transition:
+          border-color 0.16s var(--ease),
+          color 0.16s var(--ease),
+          background 0.16s var(--ease),
+          transform 0.16s var(--ease);
       }
-      .cast-chip:hover {
-        border-color: var(--accent);
+      .detail-chip:hover {
+        border-color: var(--border-hover);
         color: var(--text-white);
         background: var(--bg-hover);
-      }
-      .genre-chip:hover {
-        border-color: var(--accent);
-        color: var(--text-white);
-        background: var(--bg-hover);
-      }
-      .tag-chip:hover {
-        border-color: var(--accent);
-        color: var(--text-white);
-        background: var(--bg-hover);
-      }
-      .keyword-chip:hover {
-        border-color: var(--accent);
-        color: var(--text-white);
-        background: var(--bg-hover);
-      }
-      .director-chip:hover {
-        border-color: var(--accent);
-        color: var(--text-white);
-        background: var(--bg-hover);
+        transform: translateY(-1px);
       }
       .filename {
-        font-family: ui-monospace, monospace;
+        font-family: var(--font-mono);
+        font-size: 12.5px;
         color: var(--text-chip);
         background: var(--bg-sidebar);
         border: 1px solid var(--border-main);
-        padding: 9px;
-        border-radius: 7px;
+        padding: 10px 12px;
+        border-radius: var(--r-sm);
         word-break: break-all;
       }
+
       .pagination {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        margin-top: 25px;
+        margin-top: 28px;
         flex-wrap: wrap;
       }
       .page-btn {
         border: 1px solid var(--border-main);
         background: var(--bg-card);
         color: var(--text-tag);
-        border-radius: 8px;
+        border-radius: var(--r-md);
         padding: 8px 14px;
         font-size: 13px;
         cursor: pointer;
         min-width: 40px;
         text-align: center;
+        transition:
+          border-color 0.16s var(--ease),
+          color 0.16s var(--ease),
+          background 0.16s var(--ease);
       }
       .page-btn:hover:not(:disabled) {
-        border-color: var(--accent);
+        border-color: var(--border-hover);
         color: var(--text-white);
         background: var(--bg-hover);
       }
       .page-btn.active {
-        border-color: var(--accent);
+        border-color: transparent;
         color: var(--text-white);
-        background: var(--bg-hover);
+        background: linear-gradient(135deg, var(--accent), #6d43e0);
+        box-shadow: 0 4px 14px -4px var(--accent-glow);
       }
       .page-btn:disabled {
-        opacity: 0.4;
+        opacity: 0.35;
         cursor: not-allowed;
       }
       .page-info {
         color: var(--text-secondary);
-        font-size: 13px;
+        font-size: 12.5px;
+        font-family: var(--font-mono);
         white-space: nowrap;
+        margin-left: 4px;
       }
+
       @media (max-width: 800px) {
         header {
           padding: 0 15px;
+          gap: 14px;
         }
         .count {
           display: none;
@@ -417,25 +765,64 @@
         }
         .grid {
           grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+          gap: 16px;
         }
         .content {
-          padding: 18px;
+          padding: 20px 16px;
         }
         .modal-box {
           grid-template-columns: 1fr;
         }
         .modal-poster {
-          height: 350px;
+          height: 320px;
+          min-height: unset;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          transition-duration: 0.001ms !important;
         }
       }
     </style>
   </head>
   <body>
     <header>
-      <div class="brand">AI <span>Media Hub</span></div>
+      <div class="brand">
+        <span class="brand-mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle
+              cx="12"
+              cy="12"
+              r="9.5"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+            <path d="M10 8.3v7.4l6.2-3.7-6.2-3.7z" fill="currentColor" />
+          </svg>
+        </span>
+        AI <span class="brand-accent">Media&nbsp;Hub</span>
+      </div>
       <div class="search">
-        <span class="search-icon">⌕</span
-        ><input
+        <span class="search-icon">
+          <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+        </span>
+        <input
           id="searchInput"
           type="search"
           placeholder="Search titles, tags, keywords, genres..."
@@ -447,56 +834,173 @@
     <main>
       <aside>
         <div class="filter-group">
-          <div class="filter-title">Category</div>
-          <select id="categoryFilter">
-            <option value="">All categories</option>
-          </select>
+          <div class="filter-title">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="7" rx="1.5" />
+              <rect x="14" y="3" width="7" height="7" rx="1.5" />
+              <rect x="14" y="14" width="7" height="7" rx="1.5" />
+              <rect x="3" y="14" width="7" height="7" rx="1.5" />
+            </svg>
+            Category
+          </div>
+          <div class="select-wrap">
+            <select id="categoryFilter">
+              <option value="">All categories</option>
+            </select>
+          </div>
         </div>
         <div class="filter-group">
-          <div class="filter-title">Genre</div>
-          <select id="genreFilter">
-            <option value="">All genres</option>
-          </select>
+          <div class="filter-title">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l8.29-8.29a1 1 0 0 0 0-1.41L12 2z"
+              />
+              <circle cx="7" cy="7" r="1.4" fill="currentColor" stroke="none" />
+            </svg>
+            Genre
+          </div>
+          <div class="select-wrap">
+            <select id="genreFilter">
+              <option value="">All genres</option>
+            </select>
+          </div>
         </div>
         <div class="filter-group">
-          <div class="filter-title">Tags</div>
+          <div class="filter-title">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="4" y1="9" x2="20" y2="9" />
+              <line x1="4" y1="15" x2="20" y2="15" />
+              <line x1="10" y1="3" x2="8" y2="21" />
+              <line x1="16" y1="3" x2="14" y2="21" />
+            </svg>
+            Tags
+          </div>
           <div id="tagCloud" class="tag-cloud"></div>
         </div>
-        <button id="clearBtn" class="clear">Clear all filters</button>
+        <button id="clearBtn" class="clear">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 6h18" />
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+          </svg>
+          Clear all filters
+        </button>
       </aside>
 
       <section class="content">
         <div class="toolbar">
           <h1>Media Library</h1>
-          <select id="sortSelect" style="width: auto">
-            <option value="title">Title A–Z</option>
-            <option value="titleDesc">Title Z–A</option>
-          </select>
+          <div class="select-wrap sort-wrap">
+            <select id="sortSelect">
+              <option value="title">Title A–Z</option>
+              <option value="titleDesc">Title Z–A</option>
+            </select>
+          </div>
         </div>
         <div id="grid" class="grid"></div>
         <div id="pagination" class="pagination"></div>
         <div id="empty" class="empty" style="display: none">
-          <strong>No media found</strong>Try another search or clear the
-          filters.
+          <div class="empty-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+              <line x1="8" y1="8" x2="14" y2="14" />
+              <line x1="14" y1="8" x2="8" y2="14" />
+            </svg>
+          </div>
+          <strong>No media found</strong>
+          <span>Try another search or clear the filters.</span>
         </div>
       </section>
     </main>
 
     <div id="modal" class="modal">
-      <button class="close" id="closeModal">×</button>
+      <button class="close" id="closeModal">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
       <div class="modal-box" id="modalBox"></div>
     </div>
 
     <script>
       const mediaData = [];
 
+      const ICONS = {
+        eye: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>',
+        director:
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>',
+        genres:
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l8.29-8.29a1 1 0 0 0 0-1.41L12 2z"/><circle cx="7" cy="7" r="1.4" fill="currentColor" stroke="none"/></svg>',
+        cast: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+        tags: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>',
+        keywords:
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>',
+        file: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>',
+      };
+
       async function loadData() {
         try {
-          const res = await fetch('meta-data-2.json');
+          const res = await fetch("meta-data-2.json");
           const data = await res.json();
           mediaData.push(...data);
         } catch (err) {
-          console.error('Failed to load meta-data-2.json', err);
+          console.error("Failed to load meta-data-2.json", err);
         }
         populateFilters();
         render();
@@ -623,11 +1127,11 @@
           container.innerHTML = "";
           return;
         }
-        let html = `<button class="page-btn" ${state.page === 1 ? 'disabled' : ''} onclick="goToPage(${state.page - 1})">Prev</button>`;
+        let html = `<button class="page-btn" ${state.page === 1 ? "disabled" : ""} onclick="goToPage(${state.page - 1})">‹ Prev</button>`;
         for (let i = 1; i <= totalP; i++) {
-          html += `<button class="page-btn ${i === state.page ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+          html += `<button class="page-btn ${i === state.page ? "active" : ""}" onclick="goToPage(${i})">${i}</button>`;
         }
-        html += `<button class="page-btn" ${state.page === totalP ? 'disabled' : ''} onclick="goToPage(${state.page + 1})">Next</button>`;
+        html += `<button class="page-btn" ${state.page === totalP ? "disabled" : ""} onclick="goToPage(${state.page + 1})">Next ›</button>`;
         html += `<span class="page-info">Page ${state.page} of ${totalP}</span>`;
         container.innerHTML = html;
       }
@@ -638,7 +1142,7 @@
           : x.posterImage?.fileName
             ? "Assets/" + x.posterImage.fileName
             : "";
-        return `<article class="card" data-index="${i}"><div class="poster">${thumb ? `<img src="${esc(thumb)}" alt="${esc(x.title)} poster" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="placeholder" style="display:none">Image not found<br>${esc(thumb)}</div>` : `<div class="placeholder">No poster image</div>`}</div><div class="card-body"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.category || "")}</div><div class="chips">${(
+        return `<article class="card" data-index="${i}"><div class="poster">${thumb ? `<img src="${esc(thumb)}" alt="${esc(x.title)} poster" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="placeholder" style="display:none">Image not found<br>${esc(thumb)}</div>` : `<div class="placeholder">No poster image</div>`}<div class="poster-overlay"><span class="poster-view">${ICONS.eye} View details</span></div></div><div class="card-body"><div class="title">${esc(x.title)}</div><div class="meta">${x.category ? `<span class="meta-dot"></span>${esc(x.category)}` : ""}</div><div class="chips">${(
           x.genres || []
         )
           .slice(0, 3)
@@ -646,9 +1150,11 @@
           .join("")}</div></div></article>`;
       }
       function openModal(x) {
-        const f = x.posterImage?.fileName ? "Assets/" + x.posterImage.fileName : "";
+        const f = x.posterImage?.fileName
+          ? "Assets/" + x.posterImage.fileName
+          : "";
         $("modalBox").innerHTML =
-          `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${esc(x.category || "")}</div>${x.director ? `<div class="detail-section"><div class="detail-label">Director</div><div class="detail-chips"><button class="detail-chip director-chip" data-director="${esc(x.director)}">${esc(x.director)}</button></div></div>` : ""}<div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<button class="detail-chip genre-chip" data-genre="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<button class="detail-chip tag-chip" data-tag="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<button class="detail-chip keyword-chip" data-keyword="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
+          `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${x.category ? `<span class="meta-dot"></span>${esc(x.category)}` : ""}</div>${x.director ? `<div class="detail-section"><div class="detail-label">${ICONS.director} Director</div><div class="detail-chips"><button class="detail-chip director-chip" data-director="${esc(x.director)}">${esc(x.director)}</button></div></div>` : ""}<div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.genres} Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<button class="detail-chip genre-chip" data-genre="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.cast} Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.tags} Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<button class="detail-chip tag-chip" data-tag="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.keywords} Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<button class="detail-chip keyword-chip" data-keyword="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.file} Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
         $("modal").classList.add("open");
       }
       $("searchInput").oninput = (e) => {
