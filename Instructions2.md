@@ -12,7 +12,8 @@ When analyzing a movie poster image, generate **ONLY** the following JSON struct
   "cast": [],
   "director": "",
   "posterImage": {
-    "fileName": ""
+    "fileName": "",
+    "path": ""
   },
   "category": ""
 }
@@ -31,6 +32,7 @@ Every value should be useful for one or more of these purposes:
 * filtering the media library
 * identifying the poster
 * categorizing the media
+* locating the actual poster file on disk
 
 Prefer **quality over quantity**.
 
@@ -277,9 +279,22 @@ Only use:
 
 ---
 
-## 8. `posterImage.fileName`
+## 8. `posterImage`
 
-Store the **exact original uploaded filename**.
+The `posterImage` object contains the exact original filename and the absolute filesystem path of the poster.
+
+Required structure:
+
+```json
+"posterImage": {
+  "fileName": "",
+  "path": ""
+}
+```
+
+### `fileName`
+
+Store the exact original uploaded filename.
 
 Rules:
 
@@ -288,19 +303,56 @@ Rules:
 * Never change the extension.
 * Preserve capitalization exactly.
 * Preserve spaces, numbers, and special characters exactly.
-* This value must refer to the actual uploaded file.
+* Store ONLY the filename.
+* Do NOT include folder names.
+* Do NOT include `Assets/`.
+* Do NOT include the absolute path.
 
 Example:
 
 ```json
-"posterImage": {
-  "fileName": "images5.png"
-}
+"fileName": "images.png"
+```
+
+### `path`
+
+Store the absolute filesystem path to the actual poster image.
+
+Rules:
+
+* The path must point to the actual existing poster file.
+* Use the real absolute path supplied by the application/backend.
+* Never guess the path.
+* Never construct the path from the movie title.
+* Never invent a path.
+* Preserve the actual filename and extension.
+* Do not use a relative path such as:
+  `Assets/images.png`
+* Do not use a URL unless the application explicitly uses URLs.
+* For Windows paths, use valid JSON escaping for backslashes.
+
+Example:
+
+```json
+"path": "C:\\Users\\redmi\\Downloads\\Coding\\AI Media Hub\\Assets\\images.png"
 ```
 
 IMPORTANT:
 
-The filename should preferably be provided by the application/backend. Never guess it from the movie title.
+The AI model should NOT guess or hallucinate an absolute filesystem path.
+
+The application/backend should provide the actual absolute path.
+
+If the application does not provide the path, return:
+
+```json
+"posterImage": {
+  "fileName": "",
+  "path": ""
+}
+```
+
+Do not invent one.
 
 ---
 
@@ -358,6 +410,17 @@ Only include such information if it is clearly visible as text on the poster and
 
 **Exception for `cast` and `director`:**  
 Tags and keywords should remain useful visual/search metadata. Cast and director are separate movie metadata fields and may use reliable knowledge about the identified movie. Do not put cast or director names into tags merely because they are cast or crew members. Store actor names only in the `cast` field and the director name only in the `director` field.
+
+The absolute poster path is NOT visual metadata.
+
+It must never be inferred from the image.
+
+The application/backend must provide:
+
+* fileName
+* path
+
+The vision model should not attempt to determine the filesystem path from the poster.
 
 ---
 
@@ -493,3 +556,25 @@ category
 ```
 
 Never add additional fields.
+
+The final `posterImage` structure is:
+
+```text
+posterImage
+├── fileName
+└── path
+```
+
+Do not add:
+
+* imageWidth
+* imageHeight
+* fileSize
+* mimeType
+* checksum
+* URL
+* thumbnail
+* imageId
+* OCR
+* confidence
+* technical image metadata

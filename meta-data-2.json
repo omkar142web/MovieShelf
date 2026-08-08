@@ -35,7 +35,8 @@
     ],
     "director": "James Cameron",
     "posterImage": {
-      "fileName": "Assets/images.png"
+      "fileName": "images.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\images.png"
     },
     "category": "Movie"
   },
@@ -73,7 +74,8 @@
     ],
     "director": "Christopher Nolan",
     "posterImage": {
-      "fileName": "Assets/images1.png"
+      "fileName": "images1.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\images1.png"
     },
     "category": "Movie"
   },
@@ -112,7 +114,8 @@
     ],
     "director": "Ruben Fleischer",
     "posterImage": {
-      "fileName": "Assets/images2.png"
+      "fileName": "images2.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\images2.png"
     },
     "category": "Movie"
   },
@@ -149,7 +152,8 @@
     ],
     "director": "Sandeep Reddy Vanga",
     "posterImage": {
-      "fileName": "Assets/images4.png"
+      "fileName": "images4.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\images4.png"
     },
     "category": "Movie"
   },
@@ -194,7 +198,8 @@
     ],
     "director": "Matt Reeves",
     "posterImage": {
-      "fileName": "Assets/image5.png"
+      "fileName": "image5.png",
+      "path": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image5.png"
     },
     "category": "Movie"
   }

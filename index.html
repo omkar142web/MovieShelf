@@ -539,7 +539,7 @@
       }
       function card(x) {
         const i = mediaData.indexOf(x),
-          f = x.posterImage?.fileName || "";
+          f = x.posterImage?.fileName ? "Assets/" + x.posterImage.fileName : "";
         return `<article class="card" data-index="${i}"><div class="poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="placeholder" style="display:none">Image not found<br>${esc(f)}</div>` : `<div class="placeholder">No poster image</div>`}</div><div class="card-body"><div class="title">${esc(x.title)}</div><div class="meta">${esc(x.category || "")}</div><div class="chips">${(
           x.genres || []
         )
@@ -548,7 +548,7 @@
           .join("")}</div></div></article>`;
       }
       function openModal(x) {
-        const f = x.posterImage?.fileName || "";
+        const f = x.posterImage?.fileName ? "Assets/" + x.posterImage.fileName : "";
         $("modalBox").innerHTML =
           `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${esc(x.category || "")}</div>${x.director ? `<div class="detail-section"><div class="detail-label">Director</div><div class="detail-chips"><button class="detail-chip director-chip" data-director="${esc(x.director)}">${esc(x.director)}</button></div></div>` : ""}<div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<button class="detail-chip genre-chip" data-genre="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<button class="detail-chip tag-chip" data-tag="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<button class="detail-chip keyword-chip" data-keyword="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
         $("modal").classList.add("open");
