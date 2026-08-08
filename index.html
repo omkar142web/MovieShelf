@@ -293,11 +293,18 @@
         gap: 7px;
       }
       .detail-chip {
+        color: #c7cbd1;
         background: #20252c;
         border: 1px solid #303740;
         padding: 6px 9px;
         border-radius: 999px;
         font-size: 12px;
+        cursor: pointer;
+      }
+      .cast-chip:hover {
+        border-color: #7c5cff;
+        color: #fff;
+        background: #211b3b;
       }
       .filename {
         font-family: ui-monospace, monospace;
@@ -522,7 +529,7 @@
       function openModal(x) {
         const f = x.posterImage?.fileName || "";
         $("modalBox").innerHTML =
-          `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${esc(x.category || "")}</div><div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
+          `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${esc(x.category || "")}</div><div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<span class="detail-chip">${esc(v)}</span>`).join("")}</div></div><div class="detail-section"><div class="detail-label">Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
         $("modal").classList.add("open");
       }
       $("searchInput").oninput = (e) => {
@@ -566,6 +573,23 @@
       $("modal").onclick = (e) => {
         if (e.target === $("modal")) $("modal").classList.remove("open");
       };
+      $("modalBox").addEventListener("click", (e) => {
+        const castButton = e.target.closest(".cast-chip");
+        if (!castButton) return;
+        const castName = castButton.dataset.cast;
+        state.search = castName;
+        state.category = "";
+        state.genre = "";
+        state.tag = "";
+        $("searchInput").value = castName;
+        $("categoryFilter").value = "";
+        $("genreFilter").value = "";
+        document
+          .querySelectorAll(".tag-btn")
+          .forEach((x) => x.classList.remove("active"));
+        $("modal").classList.remove("open");
+        render();
+      });
       document.onkeydown = (e) => {
         if (e.key === "Escape") $("modal").classList.remove("open");
       };

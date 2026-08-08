@@ -1,467 +1,325 @@
-I need you to update my AI Media Hub project in TWO places.
+Update the existing AI Media Hub frontend.
 
-Do not redesign the application or change unrelated functionality.
+IMPORTANT:
+Do not redesign the UI.
+Do not change the JSON structure.
+Do not change the existing search/filter behavior except where required below.
 
-TASK 1:
-Update the movie metadata JSON data format and all existing JSON records.
+CURRENT BEHAVIOR:
+The movie details modal already displays cast using:
 
-TASK 2:
-Update the AI Poster Metadata JSON Instructions markdown file so future AI-generated metadata follows the new format.
+<div class="detail-section">
+  <div class="detail-label">Cast</div>
+  <div class="detail-chips">
+    <span class="detail-chip">Cillian Murphy</span>
+    ...
+  </div>
+</div>
 
-==================================================
-TASK 1 — UPDATE THE JSON FORMAT
-==================================================
+The main search already searches the cast array using:
 
-The current JSON structure is:
+...(x.cast || [])
 
-{
-  "title": "",
-  "description": "",
-  "tags": [],
-  "keywords": [],
-  "genres": [],
-  "posterImage": {
-    "fileName": ""
-  },
-  "category": ""
-}
-
-Change it to:
-
-{
-  "title": "",
-
-  "description": "",
-
-  "tags": [],
-
-  "keywords": [],
-
-  "genres": [],
-
-  "cast": [],
-
-  "posterImage": {
-    "fileName": ""
-  },
-
-  "category": ""
-}
-
-The ONLY new metadata field is:
-
-"cast": []
-
-Do not add or remove any other metadata fields.
+TASK:
+Make every cast chip clickable, exactly like the existing tag filter buttons.
 
 ==================================================
-CAST FIELD RULES
+1. CAST CHIP UI
 ==================================================
 
-"cast" must be a simple array of principal actor names.
+Change cast chips from:
 
-Example:
+<span class="detail-chip">Cillian Murphy</span>
 
-"cast": [
-  "Cillian Murphy",
-  "Emily Blunt",
-  "Matt Damon",
-  "Robert Downey Jr.",
-  "Florence Pugh"
-]
+to a clickable element.
 
-Rules:
+Prefer:
 
-- Use real actor names.
-- Include the main/principal cast only.
-- Prefer approximately 3–8 important cast members.
-- Do not include dozens of minor actors.
-- Do not include directors, writers, producers, studios, or crew.
-- Do not include character names.
-- Do not create objects such as:
-  {
-    "actor": "",
-    "character": ""
-  }
-- Keep it as a simple string array.
-- Preserve proper capitalization of names.
-- If the movie cannot be reliably identified, use an empty array.
-- Cast is movie metadata and is allowed to come from reliable knowledge about the identified movie. It does NOT have to be visibly printed on the poster.
+<button
+  class="detail-chip cast-chip"
+  data-cast="Cillian Murphy"
+>
+  Cillian Murphy
+</button>
 
-==================================================
-UPDATE ALL EXISTING JSON DATA
-==================================================
+Do NOT use an <a> element.
 
-Find the current movie metadata JSON/data used by the application.
+Keep the existing visual appearance of detail-chip.
 
-Add the "cast" field to every existing movie record.
-
-For example:
-
-Avatar:
-
-"cast": [
-  "Sam Worthington",
-  "Zoe Saldana",
-  "Sigourney Weaver",
-  "Stephen Lang",
-  "Michelle Rodriguez"
-]
-
-Oppenheimer:
-
-"cast": [
-  "Cillian Murphy",
-  "Emily Blunt",
-  "Matt Damon",
-  "Robert Downey Jr.",
-  "Florence Pugh"
-]
-
-Venom:
-
-"cast": [
-  "Tom Hardy",
-  "Michelle Williams",
-  "Riz Ahmed",
-  "Scott Haze",
-  "Reid Scott"
-]
-
-Kabir Singh:
-
-"cast": [
-  "Shahid Kapoor",
-  "Kiara Advani",
-  "Arjan Bajwa",
-  "Suresh Oberoi"
-]
-
-The Batman:
-
-"cast": [
-  "Robert Pattinson",
-  "Zoë Kravitz",
-  "Paul Dano",
-  "Jeffrey Wright",
-  "Colin Farrell",
-  "Andy Serkis"
-]
-
-Keep all existing fields and values unless a change is specifically required by this task.
-
-Do not remove:
-- title
-- description
-- tags
-- keywords
-- genres
-- posterImage
-- category
-
-==================================================
-UPDATE THE WEB INTERFACE
-==================================================
-
-The cast must be visible in the movie details modal.
-
-Current modal sections include things such as:
-
-- Description
-- Genres
-- Tags
-- Keywords
-- Poster file
+The cast button should look like the existing chip, not like a normal browser button.
 
 Add:
 
-- Cast
+cursor: pointer;
 
-Place Cast after Genres and before Tags.
-
-Example:
-
-CAST
-
-Cillian Murphy
-Emily Blunt
-Matt Damon
-Robert Downey Jr.
-Florence Pugh
-
-Use the same visual chip/pill style already used for genres/tags/keywords.
-
-Do not create a separate page for cast.
-
-==================================================
-UPDATE SEARCH
-==================================================
-
-The existing search bar currently searches fields such as:
-
-- title
-- description
-- tags
-- keywords
-- genres
-- category
-
-Update the search logic so it ALSO searches:
-
-- cast
+and appropriate hover styling.
 
 For example:
 
-Searching:
+.detail-chip {
+  ...
+  cursor: pointer;
+}
 
-"Cillian Murphy"
+.cast-chip:hover {
+  border-color: #7c5cff;
+  color: #fff;
+  background: #211b3b;
+}
 
-must return:
+Do not significantly change the existing chip design.
+
+==================================================
+2. CLICKING A CAST CHIP
+==================================================
+
+When the user clicks a cast chip:
+
+Example:
+
+Cillian Murphy
+
+the application must:
+
+1. Put "Cillian Murphy" into the main search input.
+2. Set:
+
+state.search = "Cillian Murphy"
+
+3. Clear the active tag filter.
+4. Clear the category filter.
+5. Clear the genre filter.
+6. Re-render the media results.
+7. Keep the search text visible in the search bar.
+8. Close the movie details modal.
+
+The final result should behave exactly like the user manually typed:
+
+Cillian Murphy
+
+into the search bar.
+
+==================================================
+3. SEARCH BAR SYNCHRONIZATION
+==================================================
+
+After clicking:
+
+Cillian Murphy
+
+the search input must visibly contain:
+
+Cillian Murphy
+
+Example:
+
+<input
+  id="searchInput"
+  ...
+  value="Cillian Murphy"
+/>
+
+Do not only update the internal state.
+
+The actual visible search bar must update.
+
+==================================================
+4. SEARCH BEHAVIOR
+==================================================
+
+The existing searchable() function already contains:
+
+...(x.cast || [])
+
+Keep this behavior.
+
+The final searchable fields must remain:
+
+- title
+- description
+- category
+- tags
+- keywords
+- genres
+- cast
+
+Do not remove any of them.
+
+Search must remain:
+
+- case-insensitive
+- partial-match capable
+
+Examples:
+
+"Cillian" → Oppenheimer
+
+"Murphy" → Oppenheimer
+
+"Tom Hardy" → Venom
+
+"Robert Pattinson" → The Batman
+
+"Emily" → Oppenheimer
+
+==================================================
+5. EVENT HANDLING
+==================================================
+
+Because the modal is generated dynamically through openModal(), do NOT attach
+click handlers to cast buttons only once during page initialization.
+
+Use event delegation on the modal or modalBox.
+
+For example, add a listener similar to:
+
+$("modalBox").addEventListener("click", (e) => {
+  const castButton = e.target.closest(".cast-chip");
+
+  if (!castButton) return;
+
+  const castName = castButton.dataset.cast;
+
+  state.search = castName;
+  state.category = "";
+  state.genre = "";
+  state.tag = "";
+
+  $("searchInput").value = castName;
+  $("categoryFilter").value = "";
+  $("genreFilter").value = "";
+
+  document
+    .querySelectorAll(".tag-btn")
+    .forEach((x) => x.classList.remove("active"));
+
+  $("modal").classList.remove("open");
+
+  render();
+});
+
+Adapt this to the existing code rather than blindly duplicating code.
+
+==================================================
+6. CAST CHIP GENERATION
+==================================================
+
+Update the cast portion inside openModal().
+
+Current concept:
+
+(x.cast || [])
+  .map((v) => `<span class="detail-chip">${esc(v)}</span>`)
+  .join("")
+
+Change it to generate buttons:
+
+(x.cast || [])
+  .map(
+    (v) =>
+      `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`
+  )
+  .join("")
+
+Make sure the value is safely escaped because it is inserted into HTML.
+
+==================================================
+7. MODAL BEHAVIOR
+==================================================
+
+When a cast chip is clicked:
+
+- close modal
+- update search bar
+- filter results
+- show matching movies
+
+Do not reload the page.
+
+Do not navigate to another page.
+
+Do not create a new search page.
+
+==================================================
+8. IMPORTANT UX EXPECTATION
+==================================================
+
+The user experience should be:
+
+User opens:
 
 Oppenheimer
 
-Searching:
+↓
 
-"Tom Hardy"
+Sees:
 
-must return:
+CAST
 
-Venom
+[Cillian Murphy] [Emily Blunt] [Matt Damon] ...
 
-Searching:
+↓
 
-"Robert Pattinson"
+Clicks:
 
-must return:
+[Cillian Murphy]
 
-The Batman
+↓
 
-Searching:
+Modal closes
 
-"Emily Blunt"
+↓
 
-must return:
+Search bar becomes:
 
-Oppenheimer
+[Cillian Murphy]
 
-The search must be case-insensitive.
+↓
 
-It should search across:
+Media library automatically filters
 
-title
-description
-tags
-keywords
-genres
-cast
-category
+↓
 
-Do not remove any existing search functionality.
+Oppenheimer remains visible because it contains Cillian Murphy
+in its cast array.
+
+This should feel exactly like clicking a searchable filter.
 
 ==================================================
-UPDATE FILTER / UI LOGIC
+9. DO NOT CHANGE
 ==================================================
 
-Do NOT create a cast filter in the sidebar yet.
+Do not change:
 
-Cast only needs to:
-
-1. appear in the details modal
-2. be searchable through the main search bar
-
-Keep the existing:
-
+- JSON structure
+- mediaData loading
+- poster loading
 - category filter
 - genre filter
 - tag filter
 - sorting
 - clear filters
-- poster cards
-- details modal
+- card layout
+- modal layout
+- existing search functionality
 
-working exactly as they currently do.
-
-==================================================
-TASK 2 — UPDATE THE AI INSTRUCTIONS MARKDOWN
-==================================================
-
-Find the existing file:
-
-AI Poster Metadata JSON Instructions
-
-Update it so the required JSON format becomes:
-
-{
-  "title": "",
-  "description": "",
-  "tags": [],
-  "keywords": [],
-  "genres": [],
-  "cast": [],
-  "posterImage": {
-    "fileName": ""
-  },
-  "category": ""
-}
-
-The only additional top-level field is:
-
-"cast": []
+Only add the clickable-cast behavior and the necessary styling.
 
 ==================================================
-ADD THIS SECTION TO THE INSTRUCTIONS
+10. FINAL TEST
 ==================================================
 
-## 6. `cast`
+After implementing, verify:
 
-Generate a list of the principal cast members of the identified movie.
-
-Rules:
-
-- Include approximately 3–8 principal actors.
-- Use actor names, not character names.
-- Use proper capitalization.
-- Do not include directors, writers, producers, studios, or crew.
-- Do not include minor/background actors unless they are important principal cast members.
-- Keep the value as a simple array of strings.
-- Cast is movie metadata and may be determined from reliable knowledge of the identified movie.
-- Cast does not need to be visibly printed on the poster.
-- If the movie cannot be reliably identified, return an empty array.
-
-Example:
-
-"cast": [
-  "Cillian Murphy",
-  "Emily Blunt",
-  "Matt Damon",
-  "Robert Downey Jr.",
-  "Florence Pugh"
-]
-
-==================================================
-RENUMBER THE EXISTING SECTIONS
-==================================================
-
-After adding cast:
-
-1. title
-2. description
-3. tags
-4. keywords
-5. genres
-6. cast
-7. posterImage.fileName
-8. category
-
-Update all references in the markdown accordingly.
-
-==================================================
-UPDATE THE IMAGE-GROUNDING RULE
-==================================================
-
-The previous instructions said that actor names should not be added because they are not necessarily visible on the poster.
-
-Keep that rule for tags and keywords.
-
-However, create an explicit exception for the new "cast" field:
-
-- Tags and keywords should remain useful visual/search metadata.
-- Cast is separate movie metadata.
-- Cast may use reliable knowledge about the identified movie.
-- Do not put cast names into tags merely because they are cast members.
-- Store actor names only in the "cast" field.
-
-This distinction is important.
-
-==================================================
-UPDATE TAGS / KEYWORDS RULE
-==================================================
-
-Keep the existing rules for tags and keywords.
-
-Do NOT start filling tags and keywords with actor names just because cast information is now available.
-
-For example, this is BAD:
-
-"tags": [
-  "superhero",
-  "dark",
-  "action",
-  "tom hardy",
-  "michelle williams"
-]
-
-Instead:
-
-"tags": [
-  "superhero",
-  "symbiote",
-  "dark",
-  "action"
-],
-
-"cast": [
-  "Tom Hardy",
-  "Michelle Williams",
-  "Riz Ahmed"
-]
-
-==================================================
-FINAL ALLOWED JSON STRUCTURE
-==================================================
-
-The AI output must contain ONLY these 8 top-level fields:
-
-title
-description
-tags
-keywords
-genres
-cast
-posterImage
-category
-
-No other fields are allowed.
-
-Do NOT add:
-
-- director
-- actors object
-- character names
-- release date
-- runtime
-- studio
-- rating
-- country
-- language
-- OCR
-- confidence
-- colors
-- lighting
-- composition
-- people detection
-- object detection
-- external IDs
-- technical image information
-- AI analysis information
-
-==================================================
-IMPORTANT
-==================================================
-
-After making the changes:
-
-1. Find the actual JSON/data file used by the application.
-2. Add "cast" to every existing record.
-3. Find the actual AI Poster Metadata JSON Instructions markdown file.
-4. Update the markdown instructions.
-5. Update the frontend modal to display cast.
-6. Update search so cast is searchable.
-7. Verify there are no JavaScript errors.
-8. Verify all existing search/filter functionality still works.
-9. Verify an actor search returns the correct movie.
-10. Do not make unrelated UI or architectural changes.
-
-Do not just explain the changes to me.
-
-Actually modify the project files.
+1. Open Oppenheimer.
+2. Click "Cillian Murphy".
+3. Modal closes.
+4. Search bar says "Cillian Murphy".
+5. Results filter automatically.
+6. Oppenheimer appears.
+7. Search "Murphy" also finds Oppenheimer.
+8. Open another movie and click an actor.
+9. The same behavior works.
+10. Existing tag buttons still work.
+11. Clear all filters still clears the cast-based search.
+12. No JavaScript console errors.
