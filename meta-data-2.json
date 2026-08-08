@@ -26,6 +26,13 @@
       "Fantasy",
       "Adventure"
     ],
+    "cast": [
+      "Sam Worthington",
+      "Zoe Saldana",
+      "Sigourney Weaver",
+      "Stephen Lang",
+      "Michelle Rodriguez"
+    ],
     "posterImage": {
       "fileName": "Assets/images.png"
     },
@@ -55,6 +62,13 @@
       "Biography",
       "History",
       "Thriller"
+    ],
+    "cast": [
+      "Cillian Murphy",
+      "Emily Blunt",
+      "Matt Damon",
+      "Robert Downey Jr.",
+      "Florence Pugh"
     ],
     "posterImage": {
       "fileName": "Assets/images1.png"
@@ -87,6 +101,13 @@
       "Science Fiction",
       "Thriller"
     ],
+    "cast": [
+      "Tom Hardy",
+      "Michelle Williams",
+      "Riz Ahmed",
+      "Scott Haze",
+      "Reid Scott"
+    ],
     "posterImage": {
       "fileName": "Assets/images2.png"
     },
@@ -116,6 +137,12 @@
     "genres": [
       "Drama",
       "Romance"
+    ],
+    "cast": [
+      "Shahid Kapoor",
+      "Kiara Advani",
+      "Arjan Bajwa",
+      "Suresh Oberoi"
     ],
     "posterImage": {
       "fileName": "Assets/images4.png"
@@ -152,6 +179,14 @@
       "Crime",
       "Drama",
       "Thriller"
+    ],
+    "cast": [
+      "Robert Pattinson",
+      "Zoë Kravitz",
+      "Paul Dano",
+      "Jeffrey Wright",
+      "Colin Farrell",
+      "Andy Serkis"
     ],
     "posterImage": {
       "fileName": "Assets/image5.png"

@@ -9,6 +9,7 @@ When analyzing a movie poster image, generate **ONLY** the following JSON struct
   "tags": [],
   "keywords": [],
   "genres": [],
+  "cast": [],
   "posterImage": {
     "fileName": ""
   },
@@ -204,7 +205,37 @@ Rules:
 
 ---
 
-## 6. `posterImage.fileName`
+## 6. `cast`
+
+Generate a list of the principal cast members of the identified movie.
+
+Rules:
+
+* Include approximately 3–8 principal actors.
+* Use actor names, not character names.
+* Use proper capitalization.
+* Do not include directors, writers, producers, studios, or crew.
+* Do not include minor/background actors unless they are important principal cast members.
+* Keep the value as a simple array of strings.
+* Cast is movie metadata and may be determined from reliable knowledge of the identified movie.
+* Cast does not need to be visibly printed on the poster.
+* If the movie cannot be reliably identified, return an empty array.
+
+Example:
+
+```json
+"cast": [
+  "Cillian Murphy",
+  "Emily Blunt",
+  "Matt Damon",
+  "Robert Downey Jr.",
+  "Florence Pugh"
+]
+```
+
+---
+
+## 7. `posterImage.fileName`
 
 Store the **exact original uploaded filename**.
 
@@ -231,7 +262,7 @@ The filename should preferably be provided by the application/backend. Never gue
 
 ---
 
-## 7. `category`
+## 8. `category`
 
 For a movie poster, always use:
 
@@ -283,6 +314,9 @@ Examples:
 
 Only include such information if it is clearly visible as text on the poster and is genuinely useful for the requested field.
 
+**Exception for `cast`:**  
+Tags and keywords should remain useful visual/search metadata. Cast is separate movie metadata and may use reliable knowledge about the identified movie. Do not put cast names into tags merely because they are cast members. Store actor names only in the `cast` field.
+
 ---
 
 # Tags vs Keywords
@@ -316,6 +350,36 @@ Keep them different.
 ```
 
 Do not produce two lists that are essentially identical.
+
+Do NOT start filling tags and keywords with actor names just because cast information is now available.
+
+For example, this is BAD:
+
+```json
+"tags": [
+  "superhero",
+  "dark",
+  "action",
+  "tom hardy",
+  "michelle williams"
+]
+```
+
+Instead:
+
+```json
+"tags": [
+  "superhero",
+  "symbiote",
+  "dark",
+  "action"
+],
+"cast": [
+  "Tom Hardy",
+  "Michelle Williams",
+  "Riz Ahmed"
+]
+```
 
 ---
 
@@ -380,6 +444,7 @@ description
 tags
 keywords
 genres
+cast
 posterImage
 category
 ```
