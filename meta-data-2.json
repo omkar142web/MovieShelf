@@ -27,7 +27,7 @@
       "Adventure"
     ],
     "posterImage": {
-      "fileName": "images.png"
+      "fileName": "Assets/images.png"
     },
     "category": "Movie"
   },
@@ -57,7 +57,7 @@
       "Thriller"
     ],
     "posterImage": {
-      "fileName": "images1.png"
+      "fileName": "Assets/images1.png"
     },
     "category": "Movie"
   },
@@ -88,7 +88,7 @@
       "Thriller"
     ],
     "posterImage": {
-      "fileName": "images2.png"
+      "fileName": "Assets/images2.png"
     },
     "category": "Movie"
   },
@@ -118,7 +118,7 @@
       "Romance"
     ],
     "posterImage": {
-      "fileName": "images4.png"
+      "fileName": "Assets/images4.png"
     },
     "category": "Movie"
   },
@@ -154,7 +154,7 @@
       "Thriller"
     ],
     "posterImage": {
-      "fileName": "image5.png"
+      "fileName": "Assets/image5.png"
     },
     "category": "Movie"
   }
