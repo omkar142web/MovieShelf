@@ -57,39 +57,34 @@ Example:
 
 ## 2. `description`
 
-Write a concise description of the **actual poster image**.
+Write a concise description that explains **what the movie is about**.
 
-Include the most important:
-
-* main subject/character
-* important visual elements
-* setting/background
-* distinctive objects
-* overall visual atmosphere
+The description should give the user a quick understanding of the movie's story, subject, or central premise.
 
 Rules:
 
-* Use 1–2 sentences.
-* Describe what is visually present.
-* Do not write a movie plot summary.
-* Do not explain the movie's story.
-* Do not add unnecessary trivia.
-* Do not mention actors unless their identity is clearly printed on the poster and relevant.
-* Do not add information only because the AI already knows the movie.
+* Write 1–3 sentences.
+* Describe the movie's main premise or story.
+* Mention the main subject, conflict, journey, or central idea when useful.
+* Keep it concise and informative.
+* Do not write a detailed plot summary.
+* Do not reveal major spoilers or the ending.
+* Do not describe only the poster's visual appearance.
+* Do not mention visual elements such as colors, lighting, poster layout, clothing, or background unless they are relevant to explaining the movie itself.
+* Use reliable knowledge about the identified movie when necessary.
+* If the movie cannot be reliably identified, provide a concise description based only on what can reasonably be determined.
 
 Good:
 
-```text
-"A dark superhero poster featuring Batman standing in a rain-soaked city with the Bat-Signal above him and several characters surrounding him."
-```
+"A biographical drama about J. Robert Oppenheimer and his role in the development of the atomic bomb during World War II, exploring the scientific ambition, moral consequences, and political tensions surrounding the Manhattan Project."
 
 Bad:
 
-```text
-"A crime thriller about Bruce Wayne's journey to uncover corruption in Gotham."
-```
+"A man in a suit and hat stands before a massive fiery explosion with Christopher Nolan's name above the title."
 
-The second is a plot summary and should NOT be generated.
+The second describes the poster image rather than the movie and should NOT be used as the movie description.
+
+Do not write a full plot summary.
 
 ---
 
