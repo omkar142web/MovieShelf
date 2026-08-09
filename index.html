@@ -137,8 +137,11 @@
         align-items: center;
         gap: clamp(10px, 2vw, 22px);
         padding: 0 clamp(14px, 3.4vw, 28px);
-        position: sticky;
+        position: fixed;
         top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
         background: var(--bg-glass);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
@@ -241,19 +244,21 @@
       }
 
       main {
-        display: grid;
-        grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+        display: block;
+        margin-top: var(--header-h);
         min-height: calc(100vh - var(--header-h));
       }
       aside {
         border-right: 1px solid var(--border-main);
         padding: 26px 20px;
         background: var(--bg-sidebar);
-        align-self: start;
-        position: sticky;
+        position: fixed;
         top: var(--header-h);
-        max-height: calc(100vh - var(--header-h));
+        left: 0;
+        width: var(--sidebar-w);
+        height: calc(100vh - var(--header-h));
         overflow-y: auto;
+        z-index: 20;
       }
       .filter-toggle {
         display: none;
@@ -421,9 +426,9 @@
 
       .content {
         padding: 28px clamp(16px, 3vw, 30px) 40px;
+        margin-left: var(--sidebar-w);
+        margin-right: auto;
         max-width: var(--content-max);
-        margin-inline: auto;
-        width: 100%;
       }
       .toolbar {
         display: flex;
@@ -927,12 +932,17 @@
           display: none;
         }
         main {
-          grid-template-columns: 1fr;
+          margin-top: var(--header-h);
         }
         aside {
+          position: static;
+          top: auto;
+          left: auto;
+          width: auto;
+          height: auto;
+          z-index: auto;
           border-right: 0;
           border-bottom: 1px solid var(--border-main);
-          position: static;
           max-height: none;
           padding: 16px;
         }
@@ -960,6 +970,8 @@
         }
         .content {
           padding: 18px 16px 32px;
+          margin-left: 0;
+          max-width: none;
         }
         .grid {
           grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -1066,8 +1078,8 @@
 
       /* ============ Landscape mobile ============ */
       @media (max-height: 500px) and (orientation: landscape) {
-        header {
-          height: 56px;
+        :root {
+          --header-h: 56px;
         }
         aside {
           padding: 14px 16px;
