@@ -1,4 +1,4 @@
-[
+const mediaData = [
   {
     "title": "Avatar",
     "description": "A paraplegic Marine is sent to the alien moon Pandora on a unique mission but finds himself torn between following orders and protecting the indigenous Na'vi people after a profound spiritual connection to their world.",
@@ -483,4 +483,4 @@
     },
     "category": "Movie"
   }
-]
+];

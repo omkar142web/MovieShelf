@@ -978,9 +978,8 @@
       <div class="modal-box" id="modalBox"></div>
     </div>
 
+    <script src="meta-data-2.js"></script>
     <script>
-      const mediaData = [];
-
       const ICONS = {
         eye: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>',
         director:
@@ -993,20 +992,6 @@
           '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>',
         file: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>',
       };
-
-      async function loadData() {
-        try {
-          const res = await fetch("meta-data-2.json");
-          const data = await res.json();
-          mediaData.push(...data);
-        } catch (err) {
-          console.error("Failed to load meta-data-2.json", err);
-        }
-        populateFilters();
-        render();
-      }
-
-      loadData();
 
       const state = {
         search: "",
@@ -1135,13 +1120,18 @@
         html += `<span class="page-info">Page ${state.page} of ${totalP}</span>`;
         container.innerHTML = html;
       }
+      function toFileUrl(p) {
+        if (!p) return "";
+        return "file:///" + p.replace(/\\/g, "/");
+      }
       function card(x) {
         const i = mediaData.indexOf(x);
-        const thumb = x.posterImage?.thumbnailFileName
-          ? "Assets/thumbnails/" + x.posterImage.thumbnailFileName
-          : x.posterImage?.fileName
-            ? "Assets/" + x.posterImage.fileName
-            : "";
+        let thumb = "";
+        if (x.posterImage?.absolutePath) {
+          thumb = toFileUrl(x.posterImage.absolutePath);
+        } else if (x.posterImage?.thumbnailFileName) {
+          thumb = "Assets/thumbnails/" + x.posterImage.thumbnailFileName;
+        }
         return `<article class="card" data-index="${i}"><div class="poster">${thumb ? `<img src="${esc(thumb)}" alt="${esc(x.title)} poster" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="placeholder" style="display:none">Image not found<br>${esc(thumb)}</div>` : `<div class="placeholder">No poster image</div>`}<div class="poster-overlay"><span class="poster-view">${ICONS.eye} View details</span></div></div><div class="card-body"><div class="title">${esc(x.title)}</div><div class="meta">${x.category ? `<span class="meta-dot"></span>${esc(x.category)}` : ""}</div><div class="chips">${(
           x.genres || []
         )
@@ -1195,9 +1185,12 @@
 
       function openModal(x) {
         lastFocusedElement = document.activeElement;
-        const f = x.posterImage?.fileName
-          ? "Assets/" + x.posterImage.fileName
-          : "";
+        let f = "";
+        if (x.posterImage?.absolutePath) {
+          f = toFileUrl(x.posterImage.absolutePath);
+        } else if (x.posterImage?.thumbnailFileName) {
+          f = "Assets/thumbnails/" + x.posterImage.thumbnailFileName;
+        }
         $("modalBox").innerHTML =
           `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${x.category ? `<span class="meta-dot"></span>${esc(x.category)}` : ""}</div>${x.director ? `<div class="detail-section"><div class="detail-label">${ICONS.director} Director</div><div class="detail-chips"><button class="detail-chip director-chip" data-director="${esc(x.director)}">${esc(x.director)}</button></div></div>` : ""}<div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.genres} Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<button class="detail-chip genre-chip" data-genre="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.cast} Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.tags} Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<button class="detail-chip tag-chip" data-tag="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.keywords} Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<button class="detail-chip keyword-chip" data-keyword="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.file} Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
         $("modal").classList.add("open");
