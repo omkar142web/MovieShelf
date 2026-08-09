@@ -1535,6 +1535,7 @@
           .join("")}</div></div></article>`;
       }
       let lastFocusedElement = null;
+      let modalHistoryPushed = false;
 
       function lockScroll() {
         const scrollBarWidth =
@@ -1549,12 +1550,16 @@
         document.body.style.paddingRight = "";
       }
 
-      function closeModal() {
+      function closeModal(fromPopState) {
         $("modal").classList.remove("open");
         unlockScroll();
         document.removeEventListener("keydown", trapFocus);
         if (lastFocusedElement && document.contains(lastFocusedElement))
           lastFocusedElement.focus();
+        if (modalHistoryPushed) {
+          modalHistoryPushed = false;
+          if (!fromPopState) history.back();
+        }
       }
 
       function trapFocus(e) {
@@ -1589,6 +1594,10 @@
         $("modalBox").innerHTML =
           `<div class="modal-poster${f ? " has-image" : ""}">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" decoding="async" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2 id="modalTitle">${esc(x.title)}</h2><div class="meta">${x.category ? `<span class="meta-dot"></span>${esc(x.category)}` : ""}</div>${x.director ? `<div class="detail-section"><div class="detail-label">${ICONS.director} Director</div><div class="detail-chips"><button class="detail-chip director-chip" data-director="${esc(x.director)}">${esc(x.director)}</button></div></div>` : ""}<div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.genres} Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<button class="detail-chip genre-chip" data-genre="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.cast} Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.tags} Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<button class="detail-chip tag-chip" data-tag="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.keywords} Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<button class="detail-chip keyword-chip" data-keyword="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.file} Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
         $("modal").classList.add("open");
+        if (!modalHistoryPushed) {
+          modalHistoryPushed = true;
+          history.pushState({ mediaModal: true }, "", location.href);
+        }
         const modalImg = $("modalBox").querySelector(".modal-poster img");
         if (modalImg) {
           const done = () => modalImg.classList.add("loaded");
@@ -1719,6 +1728,12 @@
             .forEach((x) => x.classList.remove("active"));
           closeModal();
           setPage1();
+        }
+      });
+
+      window.addEventListener("popstate", () => {
+        if ($("modal").classList.contains("open")) {
+          closeModal(true);
         }
       });
 
