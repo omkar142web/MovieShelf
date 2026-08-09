@@ -36,6 +36,7 @@
     "director": "James Cameron",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\images.png",
+      "assetPath": "Assets/images.png",
       "thumbnailFileName": "images.png"
     },
     "category": "Movie"
@@ -75,6 +76,7 @@
     "director": "Christopher Nolan",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\images1.png",
+      "assetPath": "Assets/images1.png",
       "thumbnailFileName": "images1.png"
     },
     "category": "Movie"
@@ -115,6 +117,7 @@
     "director": "Ruben Fleischer",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\images2.png",
+      "assetPath": "Assets/images2.png",
       "thumbnailFileName": "images2.png"
     },
     "category": "Movie"
@@ -153,6 +156,7 @@
     "director": "Sandeep Reddy Vanga",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\images4.png",
+      "assetPath": "Assets/images4.png",
       "thumbnailFileName": "images4.png"
     },
     "category": "Movie"
@@ -199,6 +203,7 @@
     "director": "Matt Reeves",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image5.png",
+      "assetPath": "Assets/image5.png",
       "thumbnailFileName": "image5.png"
     },
     "category": "Movie"
@@ -239,6 +244,7 @@
     "director": "David Fincher",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image6.png",
+      "assetPath": "Assets/image6.png",
       "thumbnailFileName": "image6.png"
     },
     "category": "Movie"
@@ -279,6 +285,7 @@
     "director": "Francis Ford Coppola",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image7.png",
+      "assetPath": "Assets/image7.png",
       "thumbnailFileName": "image7.png"
     },
     "category": "Movie"
@@ -319,6 +326,7 @@
     "director": "Christopher Nolan",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image8.png",
+      "assetPath": "Assets/image8.png",
       "thumbnailFileName": "image8.png"
     },
     "category": "Movie"
@@ -358,6 +366,7 @@
     "director": "Lana Wachowski, Lilly Wachowski",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image9.png",
+      "assetPath": "Assets/image9.png",
       "thumbnailFileName": "image9.png"
     },
     "category": "Movie"
@@ -398,6 +407,7 @@
     "director": "Christopher Nolan",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image10.png",
+      "assetPath": "Assets/image10.png",
       "thumbnailFileName": "image10.png"
     },
     "category": "Movie"
@@ -439,6 +449,7 @@
     "director": "David Fincher",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image11.png",
+      "assetPath": "Assets/image11.png",
       "thumbnailFileName": "image11.png"
     },
     "category": "Movie"
@@ -479,6 +490,7 @@
     "director": "Roberto Benigni",
     "posterImage": {
       "absolutePath": "C:\\Users\\redmi\\Downloads\\Coding\\startups\\MovieShelf\\Assets\\image12.png",
+      "assetPath": "Assets/image12.png",
       "thumbnailFileName": "image12.png"
     },
     "category": "Movie"

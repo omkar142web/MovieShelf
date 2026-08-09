@@ -1522,7 +1522,9 @@
       function card(x) {
         const i = mediaData.indexOf(x);
         let thumb = "";
-        if (x.posterImage?.absolutePath) {
+        if (x.posterImage?.assetPath) {
+          thumb = x.posterImage.assetPath;
+        } else if (x.posterImage?.absolutePath) {
           thumb = toFileUrl(x.posterImage.absolutePath);
         } else if (x.posterImage?.thumbnailFileName) {
           thumb = "Assets/thumbnails/" + x.posterImage.thumbnailFileName;
@@ -1586,7 +1588,9 @@
       function openModal(x) {
         lastFocusedElement = document.activeElement;
         let f = "";
-        if (x.posterImage?.absolutePath) {
+        if (x.posterImage?.assetPath) {
+          f = x.posterImage.assetPath;
+        } else if (x.posterImage?.absolutePath) {
           f = toFileUrl(x.posterImage.absolutePath);
         } else if (x.posterImage?.thumbnailFileName) {
           f = "Assets/thumbnails/" + x.posterImage.thumbnailFileName;
