@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Media Hub</title>
+    <meta name="theme-color" content="#0a0c11" />
+    <title>Media Shelf</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -62,6 +63,12 @@
         --font-display: "Bricolage Grotesque", Inter, system-ui, sans-serif;
         --font-body: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
         --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+        /* Responsive tokens */
+        --header-h: clamp(60px, 8vw, 76px);
+        --sidebar-w: 268px;
+        --content-max: 2040px;
+        --tap-min: 44px;
       }
 
       * {
@@ -70,6 +77,10 @@
       html {
         scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
       }
+      html,
+      body {
+        overflow-x: hidden;
+      }
       body {
         margin: 0;
         background: var(--bg-main);
@@ -77,6 +88,7 @@
         font-family: var(--font-body);
         position: relative;
         min-height: 100vh;
+        -webkit-tap-highlight-color: transparent;
       }
       body::before {
         content: "";
@@ -106,19 +118,25 @@
       select {
         font-family: inherit;
       }
+      button {
+        -webkit-tap-highlight-color: transparent;
+      }
       *:focus-visible {
         outline: 2px solid var(--accent-2);
         outline-offset: 2px;
         border-radius: 6px;
       }
+      img {
+        max-width: 100%;
+      }
 
       header {
-        height: 76px;
+        height: var(--header-h);
         border-bottom: 1px solid var(--border-main);
         display: flex;
         align-items: center;
-        gap: 22px;
-        padding: 0 28px;
+        gap: clamp(10px, 2vw, 22px);
+        padding: 0 clamp(14px, 3.4vw, 28px);
         position: sticky;
         top: 0;
         background: var(--bg-glass);
@@ -144,18 +162,20 @@
       }
       .brand {
         font-family: var(--font-display);
-        font-size: 21px;
+        font-size: clamp(16px, 3.6vw, 21px);
         font-weight: 700;
         white-space: nowrap;
         display: flex;
         align-items: center;
         gap: 9px;
         letter-spacing: -0.01em;
+        flex-shrink: 0;
       }
       .brand-mark {
         display: inline-flex;
         color: var(--accent-2);
         filter: drop-shadow(0 0 10px var(--accent-glow));
+        flex-shrink: 0;
       }
       .brand-accent {
         background: linear-gradient(135deg, var(--accent-2), var(--accent));
@@ -163,10 +183,17 @@
         background-clip: text;
         color: transparent;
       }
+      .brand-word-full {
+        display: inline;
+      }
       .search {
         flex: 1;
+        min-width: 0;
         max-width: 650px;
         position: relative;
+      }
+      .search:focus-within .search-icon {
+        color: var(--accent-2);
       }
       .search-icon {
         position: absolute;
@@ -201,10 +228,6 @@
         background: var(--bg-card-hover);
         box-shadow: 0 0 0 4px var(--accent-dim);
       }
-      .search input:focus + .search-icon,
-      .search input:focus ~ .search-icon {
-        color: var(--accent-2);
-      }
       .count {
         color: var(--text-secondary);
         font-size: 12.5px;
@@ -214,17 +237,73 @@
         border: 1px solid var(--border-soft);
         padding: 7px 12px;
         border-radius: var(--r-pill);
+        flex-shrink: 0;
       }
 
       main {
         display: grid;
-        grid-template-columns: 260px 1fr;
-        min-height: calc(100vh - 76px);
+        grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+        min-height: calc(100vh - var(--header-h));
       }
       aside {
         border-right: 1px solid var(--border-main);
         padding: 26px 20px;
         background: var(--bg-sidebar);
+        align-self: start;
+        position: sticky;
+        top: var(--header-h);
+        max-height: calc(100vh - var(--header-h));
+        overflow-y: auto;
+      }
+      .filter-toggle {
+        display: none;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-main);
+        color: var(--text-white);
+        border-radius: var(--r-md);
+        padding: 12px 14px;
+        font-size: 13.5px;
+        font-weight: 600;
+        cursor: pointer;
+        min-height: var(--tap-min);
+        transition:
+          border-color 0.18s var(--ease),
+          background 0.18s var(--ease);
+      }
+      .filter-toggle:hover {
+        border-color: var(--border-hover);
+      }
+      .filter-toggle-left {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .filter-badge {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: var(--r-pill);
+        background: linear-gradient(135deg, var(--accent), #6d43e0);
+        color: var(--text-white);
+        font-size: 11px;
+        font-weight: 700;
+        font-family: var(--font-mono);
+      }
+      .filter-toggle-chevron {
+        display: inline-flex;
+        transition: transform 0.22s var(--ease);
+        color: var(--text-secondary);
+        flex-shrink: 0;
+      }
+      .filter-toggle.open .filter-toggle-chevron {
+        transform: rotate(180deg);
       }
       .filter-group {
         margin-bottom: 28px;
@@ -270,6 +349,7 @@
         outline: none;
         font-size: 13.5px;
         cursor: pointer;
+        min-height: var(--tap-min);
         transition:
           border-color 0.18s var(--ease),
           box-shadow 0.18s var(--ease);
@@ -291,9 +371,11 @@
         background: var(--bg-card);
         color: var(--text-tag);
         border-radius: var(--r-pill);
-        padding: 6.5px 11px;
+        padding: 8px 12px;
         font-size: 12px;
         cursor: pointer;
+        min-height: 34px;
+        overflow-wrap: anywhere;
         transition:
           border-color 0.16s var(--ease),
           color 0.16s var(--ease),
@@ -321,6 +403,7 @@
         padding: 10px;
         cursor: pointer;
         font-size: 13px;
+        min-height: var(--tap-min);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -337,7 +420,10 @@
       }
 
       .content {
-        padding: 28px 30px 40px;
+        padding: 28px clamp(16px, 3vw, 30px) 40px;
+        max-width: var(--content-max);
+        margin-inline: auto;
+        width: 100%;
       }
       .toolbar {
         display: flex;
@@ -348,13 +434,14 @@
       }
       .toolbar h1 {
         font-family: var(--font-display);
-        font-size: 25px;
+        font-size: clamp(20px, 2.4vw, 25px);
         font-weight: 700;
         margin: 0;
         letter-spacing: -0.015em;
       }
       .sort-wrap {
         width: 170px;
+        flex-shrink: 0;
       }
       .sort-wrap select {
         font-size: 13px;
@@ -364,7 +451,7 @@
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(192px, 1fr));
-        gap: 22px;
+        gap: clamp(14px, 1.8vw, 22px);
       }
       .card {
         background: linear-gradient(
@@ -383,8 +470,23 @@
           box-shadow 0.24s var(--ease);
         animation: cardIn 0.4s var(--ease) both;
       }
-      .card:hover {
-        transform: translateY(-5px);
+      @media (hover: hover) and (pointer: fine) {
+        .card:hover {
+          transform: translateY(-5px);
+          border-color: var(--border-hover);
+          box-shadow: var(--shadow-lift), var(--shadow-glow);
+        }
+        .card:hover .poster img {
+          transform: scale(1.06);
+        }
+        .card:hover .poster-overlay {
+          opacity: 1;
+        }
+      }
+      .card:active {
+        transform: translateY(-1px) scale(0.995);
+      }
+      .card:focus-visible {
         border-color: var(--border-hover);
         box-shadow: var(--shadow-lift), var(--shadow-glow);
       }
@@ -399,15 +501,23 @@
         overflow: hidden;
         position: relative;
       }
+      .poster.has-image:not(.loaded) {
+        background: linear-gradient(110deg, #12151c 30%, #1c2130 50%, #12151c 70%);
+        background-size: 220% 100%;
+        animation: shimmer 1.6s linear infinite;
+      }
       .poster img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
-        transition: transform 0.5s var(--ease);
+        opacity: 0;
+        transition:
+          opacity 0.35s var(--ease),
+          transform 0.5s var(--ease);
       }
-      .card:hover .poster img {
-        transform: scale(1.06);
+      .poster img.loaded {
+        opacity: 1;
       }
       .poster-overlay {
         position: absolute;
@@ -424,8 +534,16 @@
         opacity: 0;
         transition: opacity 0.24s var(--ease);
       }
-      .card:hover .poster-overlay {
-        opacity: 1;
+      @media (hover: none) {
+        .poster-overlay {
+          opacity: 1;
+          background: linear-gradient(
+            to top,
+            rgba(6, 7, 10, 0.85) 0%,
+            rgba(6, 7, 10, 0.05) 60%,
+            transparent 85%
+          );
+        }
       }
       .poster-view {
         display: inline-flex;
@@ -488,10 +606,11 @@
         border: 1px solid var(--border-soft);
         border-radius: var(--r-pill);
         padding: 4px 8px;
+        overflow-wrap: anywhere;
       }
 
       .empty {
-        padding: 90px 20px;
+        padding: clamp(50px, 10vw, 90px) 20px;
         text-align: center;
         color: var(--text-secondary);
       }
@@ -546,6 +665,14 @@
           opacity: 1;
         }
       }
+      @keyframes shimmer {
+        from {
+          background-position: 180% 0;
+        }
+        to {
+          background-position: -20% 0;
+        }
+      }
 
       .modal {
         position: fixed;
@@ -564,9 +691,10 @@
         animation: overlayIn 0.2s var(--ease) both;
       }
       .modal-box {
-        width: min(900px, 100%);
+        width: min(1001px, 100%);
         max-height: 90vh;
         overflow: auto;
+        overflow-x: hidden;
         background: linear-gradient(
           165deg,
           var(--bg-card),
@@ -586,10 +714,20 @@
         min-height: 420px;
         position: relative;
       }
+      .modal-poster.has-image:not(.loaded) {
+        background: linear-gradient(110deg, var(--void) 30%, #171b26 50%, var(--void) 70%);
+        background-size: 220% 100%;
+        animation: shimmer 1.6s linear infinite;
+      }
       .modal-poster img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.35s var(--ease);
+      }
+      .modal-poster img.loaded {
+        opacity: 1;
       }
       .modal-poster::after {
         content: "";
@@ -604,23 +742,26 @@
       }
       .modal-info {
         padding: 30px 32px 34px;
+        min-width: 0;
       }
       .modal-info h2 {
         font-family: var(--font-display);
         margin: 0 40px 8px 0;
-        font-size: 29px;
+        font-size: clamp(22px, 3.4vw, 29px);
         font-weight: 700;
         letter-spacing: -0.015em;
+        overflow-wrap: break-word;
       }
       .modal-description {
         color: var(--text-muted);
         line-height: 1.65;
         font-size: 14.5px;
+        overflow-wrap: break-word;
       }
       .close {
         position: fixed;
-        right: 25px;
-        top: 20px;
+        right: clamp(14px, 3vw, 25px);
+        top: clamp(12px, 2.6vw, 20px);
         border: 1px solid var(--border-main);
         background: var(--bg-glass);
         backdrop-filter: blur(8px);
@@ -669,10 +810,13 @@
         color: var(--text-chip);
         background: var(--bg-chip);
         border: 1px solid var(--border-chip);
-        padding: 6.5px 11px;
+        padding: 8px 12px;
         border-radius: var(--r-pill);
         font-size: 12px;
         cursor: pointer;
+        min-height: 34px;
+        max-width: 100%;
+        overflow-wrap: anywhere;
         transition:
           border-color 0.16s var(--ease),
           color 0.16s var(--ease),
@@ -713,6 +857,7 @@
         font-size: 13px;
         cursor: pointer;
         min-width: 40px;
+        min-height: 40px;
         text-align: center;
         transition:
           border-color 0.16s var(--ease),
@@ -742,10 +887,41 @@
         margin-left: 4px;
       }
 
-      @media (max-width: 800px) {
+      /* ============ Laptop / small desktop ============ */
+      @media (max-width: 1440px) {
+        :root {
+          --sidebar-w: 250px;
+        }
+      }
+
+      /* ============ Tablet (side-by-side, condensed) ============ */
+      @media (max-width: 1024px) {
+        :root {
+          --sidebar-w: 224px;
+        }
+        aside {
+          padding: 22px 16px;
+        }
+        .filter-group {
+          margin-bottom: 22px;
+        }
+        .grid {
+          grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+        }
+        .content {
+          padding: 24px 20px 36px;
+        }
+      }
+      @media (min-width: 769px) and (max-width: 1024px) {
+        #filterPanelBody .filter-group {
+          margin-bottom: 18px;
+        }
+      }
+
+      /* ============ Small tablet & below: drawer layout ============ */
+      @media (max-width: 768px) {
         header {
-          padding: 0 15px;
-          gap: 14px;
+          gap: 10px;
         }
         .count {
           display: none;
@@ -756,26 +932,158 @@
         aside {
           border-right: 0;
           border-bottom: 1px solid var(--border-main);
+          position: static;
+          max-height: none;
+          padding: 16px;
         }
-        .filter-group {
-          display: inline-block;
-          width: 48%;
-          vertical-align: top;
-          margin-right: 1%;
+        .filter-toggle {
+          display: flex;
         }
-        .grid {
-          grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-          gap: 16px;
+        #filterPanelBody {
+          display: none;
+          margin-top: 14px;
+        }
+        #filterPanelBody.open {
+          display: block;
+          animation: overlayIn 0.18s var(--ease) both;
+        }
+        .filter-badge {
+          display: inline-flex;
+        }
+        .toolbar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+        .sort-wrap {
+          width: 100%;
         }
         .content {
-          padding: 20px 16px;
+          padding: 18px 16px 32px;
+        }
+        .grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+          gap: 14px;
+        }
+      }
+
+      /* ============ Modal: stack on small viewports ============ */
+      @media (max-width: 680px) {
+        .modal {
+          padding: 0;
+          align-items: flex-end;
         }
         .modal-box {
           grid-template-columns: 1fr;
+          width: 100%;
+          max-height: 94vh;
+          border-radius: var(--r-xl) var(--r-xl) 0 0;
         }
         .modal-poster {
-          height: 320px;
-          min-height: unset;
+          height: 46vh;
+          min-height: 240px;
+          max-height: 340px;
+        }
+        .modal-info {
+          padding: 24px 20px 30px;
+        }
+        .modal-info h2 {
+          margin-right: 34px;
+        }
+      }
+
+      /* ============ Mobile phones ============ */
+      @media (max-width: 600px) {
+        header {
+          padding: 0 14px;
+        }
+        .brand {
+          gap: 7px;
+        }
+        .search input {
+          height: 42px;
+          font-size: 16px;
+        }
+        .grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        .card-body {
+          padding: 11px 11px 13px;
+        }
+        .title {
+          font-size: 14px;
+        }
+        .meta {
+          font-size: 11px;
+        }
+        .chip {
+          font-size: 10px;
+          padding: 3px 7px;
+        }
+        .toolbar h1 {
+          font-size: 20px;
+        }
+        .empty {
+          padding: 56px 16px;
+        }
+      }
+
+      /* ============ Very small mobile ============ */
+      @media (max-width: 400px) {
+        header {
+          padding: 0 12px;
+          gap: 8px;
+        }
+        .brand {
+          font-size: 15px;
+        }
+        .brand-mark svg {
+          width: 19px;
+          height: 19px;
+        }
+        .content {
+          padding: 14px 12px 28px;
+        }
+        .grid {
+          gap: 10px;
+        }
+        .card-body {
+          padding: 10px 10px 12px;
+        }
+        .chips {
+          gap: 4px;
+        }
+        .page-btn {
+          padding: 7px 11px;
+          min-width: 36px;
+        }
+        .close {
+          width: 34px;
+          height: 34px;
+        }
+      }
+
+      /* ============ Landscape mobile ============ */
+      @media (max-height: 500px) and (orientation: landscape) {
+        header {
+          height: 56px;
+        }
+        aside {
+          padding: 14px 16px;
+        }
+        .modal-box {
+          max-height: 96vh;
+        }
+        .modal-poster {
+          height: 100%;
+          min-height: 220px;
+        }
+        .modal-info {
+          padding: 20px 26px 26px;
+        }
+        .content {
+          padding-top: 16px;
         }
       }
 
@@ -785,6 +1093,7 @@
         *::after {
           animation-duration: 0.001ms !important;
           transition-duration: 0.001ms !important;
+          scroll-behavior: auto !important;
         }
       }
     </style>
@@ -792,7 +1101,7 @@
   <body>
     <header>
       <div class="brand">
-        <span class="brand-mark">
+        <span class="brand-mark" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             <circle
               cx="12"
@@ -804,10 +1113,10 @@
             <path d="M10 8.3v7.4l6.2-3.7-6.2-3.7z" fill="currentColor" />
           </svg>
         </span>
-        AI <span class="brand-accent">Media&nbsp;Hub</span>
+        <span class="brand-accent">Media&nbsp;Shelf</span>
       </div>
       <div class="search">
-        <span class="search-icon">
+        <span class="search-icon" aria-hidden="true">
           <svg
             width="17"
             height="17"
@@ -826,117 +1135,166 @@
           id="searchInput"
           type="search"
           placeholder="Search titles, tags, keywords, genres..."
+          aria-label="Search media library"
         />
       </div>
-      <div class="count" id="count"></div>
+      <div class="count" id="count" aria-live="polite"></div>
     </header>
 
     <main>
       <aside>
-        <div class="filter-group">
-          <div class="filter-title">
+        <button
+          type="button"
+          id="filterToggle"
+          class="filter-toggle"
+          aria-expanded="false"
+          aria-controls="filterPanelBody"
+        >
+          <span class="filter-toggle-left">
             <svg
-              width="13"
-              height="13"
+              width="14"
+              height="14"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
+              aria-hidden="true"
             >
-              <rect x="3" y="3" width="7" height="7" rx="1.5" />
-              <rect x="14" y="3" width="7" height="7" rx="1.5" />
-              <rect x="14" y="14" width="7" height="7" rx="1.5" />
-              <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              <path d="M3 6h18" />
+              <path d="M6 12h12" />
+              <path d="M10 18h4" />
             </svg>
-            Category
-          </div>
-          <div class="select-wrap">
-            <select id="categoryFilter">
-              <option value="">All categories</option>
-            </select>
-          </div>
-        </div>
-        <div class="filter-group">
-          <div class="filter-title">
+            Filters
+            <span id="filterBadge" class="filter-badge"></span>
+          </span>
+          <span class="filter-toggle-chevron" aria-hidden="true">
             <svg
-              width="13"
-              height="13"
+              width="12"
+              height="12"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
+              stroke-width="2.2"
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path
-                d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l8.29-8.29a1 1 0 0 0 0-1.41L12 2z"
-              />
-              <circle cx="7" cy="7" r="1.4" fill="currentColor" stroke="none" />
+              <path d="m6 9 6 6 6-6" />
             </svg>
-            Genre
-          </div>
-          <div class="select-wrap">
-            <select id="genreFilter">
-              <option value="">All genres</option>
-            </select>
-          </div>
-        </div>
-        <div class="filter-group">
-          <div class="filter-title">
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="4" y1="9" x2="20" y2="9" />
-              <line x1="4" y1="15" x2="20" y2="15" />
-              <line x1="10" y1="3" x2="8" y2="21" />
-              <line x1="16" y1="3" x2="14" y2="21" />
-            </svg>
-            Tags
-          </div>
-          <div id="tagCloud" class="tag-cloud"></div>
-        </div>
-        <button id="clearBtn" class="clear">
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M3 6h18" />
-            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-          </svg>
-          Clear all filters
+          </span>
         </button>
+
+        <div id="filterPanelBody">
+          <div class="filter-group">
+            <div class="filter-title">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              </svg>
+              Category
+            </div>
+            <div class="select-wrap">
+              <select id="categoryFilter" aria-label="Filter by category">
+                <option value="">All categories</option>
+              </select>
+            </div>
+          </div>
+          <div class="filter-group">
+            <div class="filter-title">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l8.29-8.29a1 1 0 0 0 0-1.41L12 2z"
+                />
+                <circle cx="7" cy="7" r="1.4" fill="currentColor" stroke="none" />
+              </svg>
+              Genre
+            </div>
+            <div class="select-wrap">
+              <select id="genreFilter" aria-label="Filter by genre">
+                <option value="">All genres</option>
+              </select>
+            </div>
+          </div>
+          <div class="filter-group">
+            <div class="filter-title">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="4" y1="9" x2="20" y2="9" />
+                <line x1="4" y1="15" x2="20" y2="15" />
+                <line x1="10" y1="3" x2="8" y2="21" />
+                <line x1="16" y1="3" x2="14" y2="21" />
+              </svg>
+              Tags
+            </div>
+            <div id="tagCloud" class="tag-cloud" role="group" aria-label="Filter by tag"></div>
+          </div>
+          <button id="clearBtn" class="clear">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 6h18" />
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            </svg>
+            Clear all filters
+          </button>
+        </div>
       </aside>
 
       <section class="content">
         <div class="toolbar">
           <h1>Media Library</h1>
           <div class="select-wrap sort-wrap">
-            <select id="sortSelect">
+            <select id="sortSelect" aria-label="Sort media">
               <option value="title">Title A–Z</option>
               <option value="titleDesc">Title Z–A</option>
             </select>
           </div>
         </div>
         <div id="grid" class="grid"></div>
-        <div id="pagination" class="pagination"></div>
+        <div id="pagination" class="pagination" role="navigation" aria-label="Pagination"></div>
         <div id="empty" class="empty" style="display: none">
-          <div class="empty-icon">
+          <div class="empty-icon" aria-hidden="true">
             <svg
               width="24"
               height="24"
@@ -959,8 +1317,8 @@
       </section>
     </main>
 
-    <div id="modal" class="modal" role="dialog" aria-modal="true">
-      <button class="close" id="closeModal">
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close" id="closeModal" aria-label="Close details">
         <svg
           width="16"
           height="16"
@@ -970,6 +1328,7 @@
           stroke-width="2.2"
           stroke-linecap="round"
           stroke-linejoin="round"
+          aria-hidden="true"
         >
           <path d="M18 6 6 18" />
           <path d="m6 6 12 12" />
@@ -981,16 +1340,16 @@
     <script src="meta-data-2.js"></script>
     <script>
       const ICONS = {
-        eye: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>',
+        eye: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>',
         director:
-          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>',
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>',
         genres:
-          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l8.29-8.29a1 1 0 0 0 0-1.41L12 2z"/><circle cx="7" cy="7" r="1.4" fill="currentColor" stroke="none"/></svg>',
-        cast: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
-        tags: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>',
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.41 0l8.29-8.29a1 1 0 0 0 0-1.41L12 2z"/><circle cx="7" cy="7" r="1.4" fill="currentColor" stroke="none"/></svg>',
+        cast: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+        tags: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>',
         keywords:
-          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>',
-        file: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>',
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>',
+        file: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/></svg>',
       };
 
       const state = {
@@ -1042,7 +1401,7 @@
         $("tagCloud").innerHTML = unique(mediaData.flatMap((x) => x.tags || []))
           .map(
             (v) =>
-              `<button class="tag-btn" data-tag="${esc(v)}">${esc(v)}</button>`,
+              `<button class="tag-btn" data-tag="${esc(v)}" aria-pressed="false">${esc(v)}</button>`,
           )
           .join("");
       }
@@ -1089,6 +1448,20 @@
         state.page = 1;
         render();
       }
+      function activeFilterCount() {
+        let n = 0;
+        if (state.category) n++;
+        if (state.genre) n++;
+        if (state.tag) n++;
+        return n;
+      }
+      function updateFilterToggleBadge() {
+        const badge = $("filterBadge");
+        if (!badge) return;
+        const n = activeFilterCount();
+        badge.textContent = n ? String(n) : "";
+        badge.style.display = n ? "inline-flex" : "none";
+      }
       function render() {
         const all = filtered();
         const total = all.length;
@@ -1099,12 +1472,22 @@
         $("count").textContent = `${total} of ${mediaData.length}`;
         $("grid").innerHTML = pageItems.map((x) => card(x)).join("");
         $("empty").style.display = total ? "none" : "block";
-        document
-          .querySelectorAll(".card")
-          .forEach(
-            (c) => (c.onclick = () => openModal(mediaData[+c.dataset.index])),
-          );
+        document.querySelectorAll(".card").forEach((c) => {
+          c.onclick = () => openModal(mediaData[+c.dataset.index]);
+          c.onkeydown = (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openModal(mediaData[+c.dataset.index]);
+            }
+          };
+        });
+        document.querySelectorAll(".poster img").forEach((img) => {
+          const done = () => img.classList.add("loaded");
+          if (img.complete) done();
+          else img.addEventListener("load", done, { once: true });
+        });
         renderPagination(totalP);
+        updateFilterToggleBadge();
       }
       function renderPagination(totalP) {
         const container = $("pagination");
@@ -1112,11 +1495,11 @@
           container.innerHTML = "";
           return;
         }
-        let html = `<button class="page-btn" ${state.page === 1 ? "disabled" : ""} onclick="goToPage(${state.page - 1})">‹ Prev</button>`;
+        let html = `<button class="page-btn" ${state.page === 1 ? "disabled" : ""} onclick="goToPage(${state.page - 1})" aria-label="Previous page">‹ Prev</button>`;
         for (let i = 1; i <= totalP; i++) {
-          html += `<button class="page-btn ${i === state.page ? "active" : ""}" onclick="goToPage(${i})">${i}</button>`;
+          html += `<button class="page-btn ${i === state.page ? "active" : ""}" onclick="goToPage(${i})" aria-label="Go to page ${i}" ${i === state.page ? 'aria-current="page"' : ""}>${i}</button>`;
         }
-        html += `<button class="page-btn" ${state.page === totalP ? "disabled" : ""} onclick="goToPage(${state.page + 1})">Next ›</button>`;
+        html += `<button class="page-btn" ${state.page === totalP ? "disabled" : ""} onclick="goToPage(${state.page + 1})" aria-label="Next page">Next ›</button>`;
         html += `<span class="page-info">Page ${state.page} of ${totalP}</span>`;
         container.innerHTML = html;
       }
@@ -1132,7 +1515,7 @@
         } else if (x.posterImage?.thumbnailFileName) {
           thumb = "Assets/thumbnails/" + x.posterImage.thumbnailFileName;
         }
-        return `<article class="card" data-index="${i}"><div class="poster">${thumb ? `<img src="${esc(thumb)}" alt="${esc(x.title)} poster" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="placeholder" style="display:none">Image not found<br>${esc(thumb)}</div>` : `<div class="placeholder">No poster image</div>`}<div class="poster-overlay"><span class="poster-view">${ICONS.eye} View details</span></div></div><div class="card-body"><div class="title">${esc(x.title)}</div><div class="meta">${x.category ? `<span class="meta-dot"></span>${esc(x.category)}` : ""}</div><div class="chips">${(
+        return `<article class="card" data-index="${i}" tabindex="0" role="button" aria-label="View details for ${esc(x.title)}"><div class="poster${thumb ? " has-image" : ""}">${thumb ? `<img src="${esc(thumb)}" alt="${esc(x.title)} poster" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="placeholder" style="display:none">Image not found<br>${esc(thumb)}</div>` : `<div class="placeholder">No poster image</div>`}<div class="poster-overlay"><span class="poster-view">${ICONS.eye} View details</span></div></div><div class="card-body"><div class="title">${esc(x.title)}</div><div class="meta">${x.category ? `<span class="meta-dot"></span>${esc(x.category)}` : ""}</div><div class="chips">${(
           x.genres || []
         )
           .slice(0, 3)
@@ -1192,8 +1575,14 @@
           f = "Assets/thumbnails/" + x.posterImage.thumbnailFileName;
         }
         $("modalBox").innerHTML =
-          `<div class="modal-poster">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2>${esc(x.title)}</h2><div class="meta">${x.category ? `<span class="meta-dot"></span>${esc(x.category)}` : ""}</div>${x.director ? `<div class="detail-section"><div class="detail-label">${ICONS.director} Director</div><div class="detail-chips"><button class="detail-chip director-chip" data-director="${esc(x.director)}">${esc(x.director)}</button></div></div>` : ""}<div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.genres} Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<button class="detail-chip genre-chip" data-genre="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.cast} Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.tags} Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<button class="detail-chip tag-chip" data-tag="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.keywords} Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<button class="detail-chip keyword-chip" data-keyword="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.file} Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
+          `<div class="modal-poster${f ? " has-image" : ""}">${f ? `<img src="${esc(f)}" alt="${esc(x.title)} poster" decoding="async" onerror="this.style.display='none'">` : ""}</div><div class="modal-info"><h2 id="modalTitle">${esc(x.title)}</h2><div class="meta">${x.category ? `<span class="meta-dot"></span>${esc(x.category)}` : ""}</div>${x.director ? `<div class="detail-section"><div class="detail-label">${ICONS.director} Director</div><div class="detail-chips"><button class="detail-chip director-chip" data-director="${esc(x.director)}">${esc(x.director)}</button></div></div>` : ""}<div class="detail-section"><div class="detail-label">Description</div><div class="modal-description">${esc(x.description || "No description available.")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.genres} Genres</div><div class="detail-chips">${(x.genres || []).map((v) => `<button class="detail-chip genre-chip" data-genre="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.cast} Cast</div><div class="detail-chips">${(x.cast || []).map((v) => `<button class="detail-chip cast-chip" data-cast="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.tags} Tags</div><div class="detail-chips">${(x.tags || []).map((v) => `<button class="detail-chip tag-chip" data-tag="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.keywords} Keywords</div><div class="detail-chips">${(x.keywords || []).map((v) => `<button class="detail-chip keyword-chip" data-keyword="${esc(v)}">${esc(v)}</button>`).join("")}</div></div><div class="detail-section"><div class="detail-label">${ICONS.file} Poster file</div><div class="filename">${esc(f || "Not specified")}</div></div></div>`;
         $("modal").classList.add("open");
+        const modalImg = $("modalBox").querySelector(".modal-poster img");
+        if (modalImg) {
+          const done = () => modalImg.classList.add("loaded");
+          if (modalImg.complete) done();
+          else modalImg.addEventListener("load", done, { once: true });
+        }
         lockScroll();
         document.addEventListener("keydown", trapFocus);
         $("closeModal").focus();
@@ -1218,11 +1607,11 @@
         const b = e.target.closest(".tag-btn");
         if (!b) return;
         state.tag = state.tag === b.dataset.tag ? "" : b.dataset.tag;
-        document
-          .querySelectorAll(".tag-btn")
-          .forEach((x) =>
-            x.classList.toggle("active", x.dataset.tag === state.tag),
-          );
+        document.querySelectorAll(".tag-btn").forEach((x) => {
+          const isActive = x.dataset.tag === state.tag;
+          x.classList.toggle("active", isActive);
+          x.setAttribute("aria-pressed", String(isActive));
+        });
         setPage1();
       };
       $("clearBtn").onclick = () => {
@@ -1230,9 +1619,10 @@
         $("searchInput").value = "";
         $("categoryFilter").value = "";
         $("genreFilter").value = "";
-        document
-          .querySelectorAll(".tag-btn")
-          .forEach((x) => x.classList.remove("active"));
+        document.querySelectorAll(".tag-btn").forEach((x) => {
+          x.classList.remove("active");
+          x.setAttribute("aria-pressed", "false");
+        });
         setPage1();
       };
       $("closeModal").onclick = () => closeModal();
@@ -1319,6 +1709,17 @@
           setPage1();
         }
       });
+
+      const filterToggleBtn = $("filterToggle");
+      const filterPanelBody = $("filterPanelBody");
+      if (filterToggleBtn && filterPanelBody) {
+        filterToggleBtn.addEventListener("click", () => {
+          const isOpen = filterPanelBody.classList.toggle("open");
+          filterToggleBtn.classList.toggle("open", isOpen);
+          filterToggleBtn.setAttribute("aria-expanded", String(isOpen));
+        });
+      }
+
       populateFilters();
       render();
     </script>
